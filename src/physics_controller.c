@@ -25,8 +25,8 @@ void	physics_step(t_character *p, double dt, t_map *map)
 
 	(void)map;
 	// printf("dt: %.2f ms\n", dt * 1000.0);
-	coyote_update(p, dt * 1000.0);
-	try_jump(p);
+	// coyote_update(p, dt * 1000.0);
+	// try_jump(p);
 	if (DRAG > 0.0)
 	{
 		down = expf(-DRAG * dt);
@@ -43,7 +43,7 @@ void	physics_step(t_character *p, double dt, t_map *map)
 		p->pos.x += (p->velocity.x * dt);
 		p->pos.y += (p->velocity.y * dt);
 	}
-	solve_vertical_space(p, map);
+	//solve_vertical_space(p, map);
 }
 
 void	physics_update(t_solong *so, long now)

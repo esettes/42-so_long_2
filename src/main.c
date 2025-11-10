@@ -38,33 +38,14 @@ void ft_hook(void* param)
 		solong->background->instances[0].x += 5;
 }
 
-void	init_floor_collision_pixels(t_solong *so)
-{
-	// size_t	i;
-
-	// i = 0;
-	// while (i < NUM_PLAT_SPRITES)
-	// {
-	// 	so->map->info_plat.floor_collision_px[i] = 15;
-	// 	printf("floor coll pixels: %li \n", so->map->info_plat.floor_collision_px[i]);
-	// 	i++;
-	// }
-	so->map->info_plat.floor_collision_px[0] = 0;
-	so->map->info_plat.floor_collision_px[1] = 17;
-	so->map->info_plat.floor_collision_px[2] = 25;
-	so->map->info_plat.floor_collision_px[3] = 32;
-	so->map->info_plat.floor_collision_px[4] = 39;
-	so->map->info_plat.floor_collision_px[5] = 47;
-	so->map->info_plat.floor_collision_px[6] = 55;
-	
-}
-
 //bool	init_solong(t_solong *so)
 
 int32_t main(int32_t argc, char **argv)
 {
 	t_solong solong;
 	long now;
+	mlx_texture_t *game_icon;
+	mlx_image_t *icon;
 
 	(void)argc;
 	now = get_time_ms();
@@ -81,13 +62,9 @@ int32_t main(int32_t argc, char **argv)
 	solong.player.last_anim_time = now;
 	
 	solong.player.curr_frame = now;
-	solong.player.prev_jump_press = false;
 	solong.player.velocity.x = 0.0;
 	solong.player.velocity.y = 0.0;
-	// solong.player.hitbox.x = TILESIZE - (TILESIZE / 3);
-	// solong.player.hitbox.y = TILESIZE - (TILESIZE / 3);
-	solong.player.coyote_ms = 0.0;
-	solong.player.jumpbuf_ms = 0.0;
+
 	solong.first_imgs = true;
 	solong.player.on_ground = true;
 	solong.accum_ms = 0;
@@ -96,20 +73,19 @@ int32_t main(int32_t argc, char **argv)
 		ft_putendl_fd("Error: Can't open file.", 2);
 		return (1);
 	}
-	solong.mlx = mlx_init(solong.map->weight * TILESIZE, solong.map->height * TILESIZE, "So long, Kong!", true);
+	solong.mlx = mlx_init(solong.map->weight * TILESIZE, solong.map->height * TILESIZE, "Pacman!", true);
+	game_icon = mlx_load_png(PLAYER_RIGHT_2);
+	icon = mlx_new_image(solong.mlx, TILESIZE, TILESIZE);
 	if (!solong.mlx)
 	{
 		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
 		return(1);
 	}
 	solong.hud_db = mlx_new_image(solong.mlx, 180, 20);
-	init_floor_collision_pixels(&solong);
-	init_sprites_platform(&solong, &solong.map->xpm_plat);
-	detect_platforms(&solong, solong.map->arr);
-	init_platfor_buffer(solong.map->plat, &solong.map->info_plat, &solong.map->xpm_plat, &solong);
 	//realloc_map(solong.map->arr, &solong);
 	solong.background = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
-	solong.hud_foreground = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
+	//solong.hud_foreground = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
+	//mlx_set_icon(solong.mlx, game_icon);
 	for (uint32_t i = 0; i < solong.background->width; ++i)
 	{
 		for (uint32_t y = 0; y < solong.background->height; ++y)
@@ -125,44 +101,31 @@ int32_t main(int32_t argc, char **argv)
 		return(1);
 	}
 	// debug
-	for (uint32_t i = 0; i < solong.hud_db->width; ++i)
-	{
-		for (uint32_t j = 0; j < solong.hud_db->height; ++j)
-		{
-			uint32_t color = ft_pixel(0, 0, 0, 255);
-			mlx_put_pixel(solong.hud_db, i, j, color);
-		}
-	}
-	
-	debug_platforms(solong);
-	
-	print_platforms(solong);
-	init_collision_flags(&solong);
+	// for (uint32_t i = 0; i < solong.hud_db->width; ++i)
+	// {
+	// 	for (uint32_t j = 0; j < solong.hud_db->height; ++j)
+	// 	{
+	// 		uint32_t color = ft_pixel(0, 0, 0, 255);
+	// 		mlx_put_pixel(solong.hud_db, i, j, color);
+	// 	}
+	// }
 	
 	
-	init_floor(&solong, solong.map);
-	print_floor(solong);
-	init_player_sprites(&solong);
 
-	init_height_map(&solong);
-	if (mlx_image_to_window(solong.mlx, solong.hud_foreground, 0, 0) == -1)
-	{
-		mlx_close_window(solong.mlx);
-		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
-		return (1);
-	}
-	if (mlx_image_to_window(solong.mlx, solong.hud_db, solong.player.pos.x, solong.player.pos.y - 10) == -1)
-	{
-		mlx_close_window(solong.mlx);
-		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
-		return (1);
-	}
-	solong.player.curr_imgs = solong.player.walk_left;
-	solong.player.looking_left = true;
-	// solong.player.visible_img = solong.player.walk_left[0];
-	// solong.player.visible_img->instances[0].enabled = true;
-	////////////////////////////// player
-	printf("player pos x: %f, y: %f\n", solong.player.pos.x, solong.player.pos.y);
+	//init_height_map(&solong);
+	// if (mlx_image_to_window(solong.mlx, solong.hud_foreground, 0, 0) == -1)
+	// {
+	// 	mlx_close_window(solong.mlx);
+	// 	ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
+	// 	return (1);
+	// }
+	// if (mlx_image_to_window(solong.mlx, solong.hud_db, solong.player.pos.x, solong.player.pos.y - 10) == -1)
+	// {
+	// 	mlx_close_window(solong.mlx);
+	// 	ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
+	// 	return (1);
+	// }
+	
 
 	// if (!resize_pixels(xpm, TILESIZE, TILESIZE))
 	// {
@@ -176,14 +139,14 @@ int32_t main(int32_t argc, char **argv)
 	
 	//mlx_key_hook(solong.mlx, &key_hook, &solong);
 	mlx_loop(solong.mlx);
-	mlx_delete_image(solong.mlx, solong.hud_db);
-	if (solong.hud_text_img)
-		mlx_delete_image(solong.mlx, solong.hud_text_img);
-	if (solong.hud_foreground)
-		mlx_delete_image(solong.mlx, solong.hud_foreground);
+	//mlx_delete_image(solong.mlx, solong.hud_db);
+	// if (solong.hud_text_img)
+	// 	mlx_delete_image(solong.mlx, solong.hud_text_img);
+	// if (solong.hud_foreground)
+	// 	mlx_delete_image(solong.mlx, solong.hud_foreground);
 	if (solong.background)
 		mlx_delete_image(solong.mlx, solong.background);
-	free_all(&solong);
+	//free_all(&solong);
 	//mlx_close_hook(solong.mlx, fps_controller, &solong);
 	mlx_close_hook(solong.mlx, fps_hook, &solong);
 	mlx_close_window(solong.mlx);

@@ -35,29 +35,28 @@ typedef	struct s_cell
 	int32_t	y;	// h
 }	t_cell;
 
+typedef struct anim
+{
+	mlx_texture_t	**text;
+	mlx_image_t		**imgs;
+	size_t			num_frames;
+}               t_anim;
+
 /**
  * @param coyote_ms float, remaining time of coyote jump
  * @param jumpbuf_ms float, remaining time of jump-buffer
  */
 typedef	struct s_character
 {
-	t_pos		pos;	
-	xpm_t		*xpm[NUM_PLAYER_WALK_SPRITES];	
-	xpm_t		*xpm2[NUM_PLAYER_WALK_SPRITES];	
-	mlx_image_t	*walk_left[NUM_PLAYER_WALK_SPRITES];
-	mlx_image_t *walk_right[NUM_PLAYER_WALK_SPRITES];
-	mlx_image_t	*up[NUM_PLAYER_WALK_SPRITES];
-	mlx_image_t	*idle_left[NUM_PLAYER_WALK_SPRITES];
-	mlx_image_t	*idle_right[NUM_PLAYER_WALK_SPRITES];
-	mlx_image_t	*visible_img;
+	t_pos		pos;
+	t_anim		right;
+	t_anim		left;
+	t_anim		up;
+	t_anim		idle;
+	t_anim		down;
 	long		last_anim_time;
 	long		curr_frame;
 	t_vec2		velocity;
-	bool		on_ground;
-	bool		on_ladder;
-	float		coyote_ms;
-	float		jumpbuf_ms;
-	bool		prev_jump_press;
 	t_vec2		hitbox;
 	mlx_image_t **curr_imgs;
 	bool		looking_left;
@@ -104,13 +103,12 @@ typedef	struct s_solong
 }	t_solong;
 
 bool	read_file(t_solong *so, char *file);
-bool	free_all(t_solong *so);
-bool	free_old_map(int32_t **map, size_t height);
+
 
 void	parse_array(int32_t **map, size_t w, size_t h);
 bool	resize_pixels(xpm_t *xpm, uint32_t new_w, uint32_t new_h);
 ///////////////////// Debug
-void	debug_platforms(t_solong solong);
+
 void	print_player_pos(t_solong *so);
 
 long	get_time_ms(void);
@@ -125,6 +123,6 @@ void	render_interpolated(t_solong *so, mlx_image_t *img);
 void	fps_controller(void *param);
 
 
-void	init_collision_flags(t_solong *so);
-void	init_height_map(t_solong *so);
+// void	init_collision_flags(t_solong *so);
+// void	init_height_map(t_solong *so);
 #endif

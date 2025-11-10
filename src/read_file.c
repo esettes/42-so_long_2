@@ -51,13 +51,23 @@ bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
 			if (line[j] == 'P')
 			{
 				playerpos->x = (double)(j * TILESIZE);
-				playerpos->y = (double)(k * TILESIZE) + 23;
+				playerpos->y = (double)(k * TILESIZE);
 				printf("parse line player pos x: %f, y: %f\n", so->player.pos.x, so->player.pos.y);
+			}
+			if (line[j] == 'C')
+			{
+				//so->map->num_collectibles++;
+			}
+			if (line[j] == 'E')
+			{
+				// enemyes
 			}
 			so->map->arr[k][j] = 0;
 		}
-		else if (line[j] == '2')
-			so->map->arr[k][j] = 2;
+		else 
+		{
+			return (false);
+		}
 		j++;
 	}
 	i = 0;
@@ -81,7 +91,8 @@ bool	read_file(t_solong *so, char *file)
 	k = 0;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (free_all(so));
+		//return (free_all(so));
+		return (1);
 	while ((line = get_next_line(fd)))
 	{
 		lines++;
@@ -92,7 +103,8 @@ bool	read_file(t_solong *so, char *file)
 	so->map->arr = malloc(sizeof(int32_t *) * lines);
 	fd = open(file, O_RDONLY);
 	if (fd < 0 || !so->map->arr)
-		return (free_all(so));
+		//return (free_all(so));
+		return (1);
 	while ((line = get_next_line(fd)))
 	{
 		so->map->weight = ft_strlen(line) - 1;
@@ -100,7 +112,8 @@ bool	read_file(t_solong *so, char *file)
 		{
 			free(line);
 			close(fd);
-			return (free_all(so));
+			//return (free_all(so));
+			return (1);
 		}
 		k++;
 		free(line);
@@ -108,7 +121,7 @@ bool	read_file(t_solong *so, char *file)
 	close(fd);
 	so->map->height = lines;
 	printf("\n");
-	parse_array(so->map->arr, so->map->weight, so->map->height);
+	//parse_array(so->map->arr, so->map->weight, so->map->height);
 	size_t i = 0;
 	size_t j = 0;
 	while (i < so->map->height)

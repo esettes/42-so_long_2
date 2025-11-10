@@ -20,21 +20,12 @@ SRCDIR		= ./src/
 SRCNAMES	= main.c \
 			read_file.c \
 			utils.c \
-			platform_init.c \
-			platform_detect.c \
 			parse.c \
-			realloc_map.c \
 			debug.c \
-			init_floor.c \
 			free.c \
 			fps_controller.c \
-			init_character_sprites.c \
-			init_player_sprites.c \
 			physics_controller.c \
-			physics_utils.c \
-			collision_controller.c \
-			HUD.c \
-			init_height_map.c
+			HUD.c
 
 SRC			= $(addprefix $(SRCDIR), $(SRCNAMES))
 
