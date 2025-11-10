@@ -123,20 +123,6 @@ bool	read_file(t_solong *so, char *file)
 	printf("Map dimensions: height[%zu] weight[%zu]\n", so->map->height, so->map->weight);
 	printf("\n");
 	//parse_array(so->map->arr, so->map->weight, so->map->height);
-	size_t i = 0;
-	size_t j = 0;
-	while (i < so->map->height)
-	{
-		j = 0;
-		while (j < so->map->weight)
-		{
-			printf("%i", so->map->arr[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-	printf("\n");
 	
 	return (true);
 }
