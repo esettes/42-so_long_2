@@ -45,7 +45,7 @@ int32_t main(int32_t argc, char **argv)
 	t_solong solong;
 	long now;
 	mlx_texture_t *game_icon;
-	mlx_image_t *icon;
+
 
 	(void)argc;
 	now = get_time_ms();
@@ -65,8 +65,6 @@ int32_t main(int32_t argc, char **argv)
 	solong.player.velocity.x = 0.0;
 	solong.player.velocity.y = 0.0;
 
-	solong.first_imgs = true;
-	solong.player.on_ground = true;
 	solong.accum_ms = 0;
 	if (!read_file(&solong, argv[1]))
 	{
@@ -75,13 +73,18 @@ int32_t main(int32_t argc, char **argv)
 	}
 	solong.mlx = mlx_init(solong.map->weight * TILESIZE, solong.map->height * TILESIZE, "Pacman!", true);
 	game_icon = mlx_load_png(PLAYER_RIGHT_2);
-	icon = mlx_new_image(solong.mlx, TILESIZE, TILESIZE);
+	// icon = mlx_new_image(solong.mlx, TILESIZE, TILESIZE);
 	if (!solong.mlx)
 	{
 		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
 		return(1);
 	}
-	solong.hud_db = mlx_new_image(solong.mlx, 180, 20);
+
+		printf("cell path; %s\n", CELL_TEXTURE);
+	solong.text_cell = mlx_load_png(CELL_TEXTURE);
+	solong.cell_tile = mlx_texture_to_image(solong.mlx, solong.text_cell);
+	mlx_resize_image(solong.cell_tile, TILESIZE, TILESIZE);
+	//solong.hud_db = mlx_new_image(solong.mlx, 180, 20);
 	//realloc_map(solong.map->arr, &solong);
 	solong.background = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
 	//solong.hud_foreground = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
@@ -100,6 +103,11 @@ int32_t main(int32_t argc, char **argv)
 		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
 		return(1);
 	}
+
+
+
+	print_map(solong.map, &solong);
+
 	// debug
 	// for (uint32_t i = 0; i < solong.hud_db->width; ++i)
 	// {
@@ -135,7 +143,7 @@ int32_t main(int32_t argc, char **argv)
 	// }
 
 	//mlx_loop_hook(solong.mlx, fps_controller, &solong);
-	mlx_loop_hook(solong.mlx, fps_hook, &solong);
+	//mlx_loop_hook(solong.mlx, fps_hook, &solong);
 	
 	//mlx_key_hook(solong.mlx, &key_hook, &solong);
 	mlx_loop(solong.mlx);

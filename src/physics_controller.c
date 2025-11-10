@@ -38,11 +38,11 @@ void	physics_step(t_character *p, double dt, t_map *map)
 	// tmp_y = p->pos.y + (p->velocity.y * dt);
 	// p->pos.x = ft_clampd(tmp_x, 0, (map->height * TILESIZE) + map->floor_collsion[0] + 3 - (TILESIZE * 2));
 	// p->pos.y = ft_clampd(tmp_y, 0, (map->height * TILESIZE) + map->floor_collsion[0] + 3 - (TILESIZE * 2));
-	if (!p->on_ground)
-	{
-		p->pos.x += (p->velocity.x * dt);
-		p->pos.y += (p->velocity.y * dt);
-	}
+	// if (!p->on_ground)
+	// {
+	// 	p->pos.x += (p->velocity.x * dt);
+	// 	p->pos.y += (p->velocity.y * dt);
+	// }
 	//solve_vertical_space(p, map);
 }
 

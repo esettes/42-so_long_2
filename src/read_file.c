@@ -99,7 +99,7 @@ bool	read_file(t_solong *so, char *file)
 		free(line);
 	}
 	close(fd);
-	so->map->original_num_lines = lines;
+	//so->map->original_num_lines = lines;
 	so->map->arr = malloc(sizeof(int32_t *) * lines);
 	fd = open(file, O_RDONLY);
 	if (fd < 0 || !so->map->arr)
@@ -107,7 +107,7 @@ bool	read_file(t_solong *so, char *file)
 		return (1);
 	while ((line = get_next_line(fd)))
 	{
-		so->map->weight = ft_strlen(line) - 1;
+		so->map->weight = ft_strlen(line);
 		if (!is_valid_line(line) || !parse_line(so, line, k, &so->player.pos))
 		{
 			free(line);
@@ -120,6 +120,7 @@ bool	read_file(t_solong *so, char *file)
 	}
 	close(fd);
 	so->map->height = lines;
+	printf("Map dimensions: height[%zu] weight[%zu]\n", so->map->height, so->map->weight);
 	printf("\n");
 	//parse_array(so->map->arr, so->map->weight, so->map->height);
 	size_t i = 0;

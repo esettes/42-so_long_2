@@ -22,7 +22,7 @@ void	update_sprites_position(t_character *p, double x, double y, t_solong *so)
 	tmp_x = (p->pos.x + x);// * p->velocity.x;
 	tmp_y = (p->pos.y + y);// * p->velocity.y;
 	p->pos.x = ft_clampd(tmp_x, 0, so->map->weight * TILESIZE - TILESIZE);
-	p->pos.y = ft_clampd(tmp_y, 0, (so->map->height * TILESIZE) + so->map->floor_collsion[0] + 3 - (TILESIZE * 2));
+	//p->pos.y = ft_clampd(tmp_y, 0, (so->map->height * TILESIZE) + so->map->floor_collsion[0] + 3 - (TILESIZE * 2));
 	// printf("player pos: x[%f] y[%f]\n", p->pos.x, p->pos.y);
 }
 
@@ -124,16 +124,15 @@ void	fps_hook(void *param)
 	target_frame_dur = 1000 / TARGET_FPS;
 	jump_press = mlx_is_key_down(so->mlx, MLX_KEY_SPACE);
 	any_dir = false;
-	if (jump_press && !so->player.prev_jump_press)
-	{
-		// if (so->player.looking_left)
-		// 	set_current_anim(so, &so->player, so->player.walk_left, NUM_PLAYER_WALK_SPRITES);
-		// else
-		// 	set_current_anim(so, &so->player, so->player.walk_right, NUM_PLAYER_WALK_SPRITES);
-	 	// so->player.jumpbuf_ms = JUMPBUF_MS;
-		// any_dir = true;
-	}
-	so->player.prev_jump_press = jump_press;
+	// if (jump_press && !so->player.prev_jump_press)
+	// {
+	// 	// if (so->player.looking_left)
+	// 	// 	set_current_anim(so, &so->player, so->player.walk_left, NUM_PLAYER_WALK_SPRITES);
+	// 	// else
+	// 	// 	set_current_anim(so, &so->player, so->player.walk_right, NUM_PLAYER_WALK_SPRITES);
+	//  	// so->player.jumpbuf_ms = JUMPBUF_MS;
+	// 	// any_dir = true;
+	// }
 	if (mlx_is_key_down(so->mlx, MLX_KEY_UP))
 	{
 		// set_current_anim(so, &so->player, so->player.up, NUM_PLAYER_WALK_SPRITES);
@@ -169,17 +168,17 @@ void	fps_hook(void *param)
         so->player.velocity.x = 0.0;
 	physics_update(so, curr_time);
 	
-	if (!any_dir && so->player.on_ground)
-	{
-		// if (so->player.looking_left)
-		// 	set_current_anim(so, &so->player, so->player.idle_left, NUM_PLAYER_WALK_SPRITES);
-		// else
-		// 	set_current_anim(so, &so->player, so->player.idle_right, NUM_PLAYER_WALK_SPRITES);
-	}
+	// if (!any_dir && so->player.on_ground)
+	// {
+	// 	// if (so->player.looking_left)
+	// 	// 	set_current_anim(so, &so->player, so->player.idle_left, NUM_PLAYER_WALK_SPRITES);
+	// 	// else
+	// 	// 	set_current_anim(so, &so->player, so->player.idle_right, NUM_PLAYER_WALK_SPRITES);
+	// }
 
-	render_interpolated(so,  so->player.curr_imgs[0]);
-	render_interpolated(so,  so->player.curr_imgs[1]);
-	render_interpolated(so,  so->player.curr_imgs[2]);
+	// render_interpolated(so,  so->player.curr_imgs[0]);
+	// render_interpolated(so,  so->player.curr_imgs[1]);
+	// render_interpolated(so,  so->player.curr_imgs[2]);
 	if (elapsed_time >= target_frame_dur)
 	{
 		so->last_ms += target_frame_dur;

@@ -78,9 +78,6 @@ typedef	struct s_map
 	size_t			height;
 	size_t			weight;
 	size_t			num_platforms;
-	size_t			original_num_lines;
-	mlx_image_t		**floor;
-	size_t			*floor_collsion;
 }	t_map;
 
 
@@ -92,11 +89,12 @@ typedef	struct s_solong
 	mlx_image_t	*screen;
 	t_character	player;
 	t_character	prev_player_status;
+	mlx_texture_t	*text_cell;
+	mlx_image_t		*cell_tile;
 	long		last_ms;
 	int			fps;
 	int			last_fps_update;
 	long		accum_ms;
-	bool		first_imgs;
 	mlx_image_t	*hud_db;
 	mlx_image_t	*hud_text_img;
 	mlx_image_t *hud_foreground;
@@ -121,7 +119,7 @@ void	physics_update(t_solong *so, long now);
 
 void	render_interpolated(t_solong *so, mlx_image_t *img);
 void	fps_controller(void *param);
-
+void	print_map(t_map *map, t_solong *so);
 
 // void	init_collision_flags(t_solong *so);
 // void	init_height_map(t_solong *so);

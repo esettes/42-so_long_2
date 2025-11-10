@@ -10,9 +10,9 @@ NAME = so_long
 DISTRO_ID := $(shell sh -c '. /etc/os-release 2>/dev/null; echo $$ID')
 
 ifeq ($(DISTRO_ID),ubuntu)
-    CFLAGS += -DASSET_DIR=\"/home/rstancu/cursus/so_long/tiles/xpm\"
+    CFLAGS += -DASSET_DIR=\"/home/rstancu/cursus/so_long_2/tiles\"
 else ifeq ($(DISTRO_ID),debian)
-    CFLAGS += -DASSET_DIR=\"/home/settes/cursus/2025/so_long/tiles/xpm\"
+    CFLAGS += -DASSET_DIR=\"/home/settes/cursus/2025/so_long_2/tiles\"
 endif
 
 
@@ -25,7 +25,8 @@ SRCNAMES	= main.c \
 			free.c \
 			fps_controller.c \
 			physics_controller.c \
-			HUD.c
+			HUD.c \
+			print_map.c
 
 SRC			= $(addprefix $(SRCDIR), $(SRCNAMES))
 
