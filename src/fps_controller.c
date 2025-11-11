@@ -139,6 +139,7 @@ void	fps_hook(void *param)
 		so->player.velocity.y = -200.0;
 		update_sprites_position(&so->player, 0, -2, so);
 		// any_dir = true;
+		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	if (mlx_is_key_down(so->mlx, MLX_KEY_DOWN))
 	{
@@ -146,6 +147,7 @@ void	fps_hook(void *param)
 		so->player.velocity.y = 200.0;
 		update_sprites_position(&so->player, 0, 2, so);
 		// any_dir = true;
+		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	
 	if (mlx_is_key_down(so->mlx, MLX_KEY_LEFT))
@@ -155,6 +157,7 @@ void	fps_hook(void *param)
 		update_sprites_position(&so->player, -2, 0, so);
 		// so->player.looking_left = true;
 		// any_dir = true;
+		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_RIGHT))
 	{
@@ -163,6 +166,7 @@ void	fps_hook(void *param)
 		update_sprites_position(&so->player, 2, 0, so);
 		so->player.looking_left = false;
 		// any_dir = true;
+		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	else
     {
@@ -182,11 +186,11 @@ void	fps_hook(void *param)
 	// render_interpolated(so,  so->player.curr_imgs[0]);
 	// render_interpolated(so,  so->player.curr_imgs[1]);
 	// render_interpolated(so,  so->player.curr_imgs[2]);
-	if (elapsed_time >= target_frame_dur)
-	{
-		so->last_ms += target_frame_dur;
-		print_player_pos(so);
-		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
-	}
+	// if (elapsed_time >= target_frame_dur)
+	// {
+	// 	so->last_ms += target_frame_dur;
+	// 	print_player_pos(so);
+	// 	animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
+	// }
 	
 }
