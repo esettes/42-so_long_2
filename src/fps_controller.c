@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:08:07 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/08 15:20:10 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/11 13:18:47 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	update_sprites_position(t_character *p, double x, double y, t_solong *so)
 	//i = 0;
 	tmp_x = (p->pos.x + x);// * p->velocity.x;
 	tmp_y = (p->pos.y + y);// * p->velocity.y;
-	p->pos.x = ft_clampd(tmp_x, 0, so->map->weight * TILESIZE - TILESIZE);
-	//p->pos.y = ft_clampd(tmp_y, 0, (so->map->height * TILESIZE) + so->map->floor_collsion[0] + 3 - (TILESIZE * 2));
+	p->pos.x = ft_clampd(tmp_x, 0, so->map->weight * TILESIZE);
+	p->pos.y = ft_clampd(tmp_y, 0, (so->map->height * TILESIZE));
 	// printf("player pos: x[%f] y[%f]\n", p->pos.x, p->pos.y);
 }
 
@@ -112,18 +112,18 @@ void	set_current_anim(t_solong *so, t_character *p, mlx_image_t **imgs, int num)
 void	fps_hook(void *param)
 {
 	t_solong	*so;
-	bool		jump_press;
+	//bool		jump_press;
 	long		curr_time;
 	long		elapsed_time;
 	long		target_frame_dur;
-	bool		any_dir;
+	//bool		any_dir;
 
 	so = (t_solong *)param;
 	curr_time = get_time_ms();	
 	elapsed_time = curr_time - so->last_ms;
 	target_frame_dur = 1000 / TARGET_FPS;
-	jump_press = mlx_is_key_down(so->mlx, MLX_KEY_SPACE);
-	any_dir = false;
+	//jump_press = mlx_is_key_down(so->mlx, MLX_KEY_SPACE);
+	//any_dir = false;
 	// if (jump_press && !so->player.prev_jump_press)
 	// {
 	// 	// if (so->player.looking_left)

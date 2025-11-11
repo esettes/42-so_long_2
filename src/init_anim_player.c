@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_anim.c                                        :+:      :+:    :+:   */
+/*   init_anim_player.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 14:47:24 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/11 10:28:39 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/11 13:23:48 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 static bool	init_anim_down(t_character *p, mlx_t *mlx)
 {
-	uint16_t	i;
-
-	i = 0;
+	
 	p->down.text = malloc(sizeof(mlx_texture_t *) * NUM_PLAYER_SPRITES);
 	if (!p->down.text)
 		return (false);
@@ -38,14 +36,17 @@ static bool	init_anim_down(t_character *p, mlx_t *mlx)
 
 static bool init_anim_up(t_character *p, mlx_t *mlx)
 {
-	uint16_t	i;
-
-	i = 0;
 	p->up.text = malloc(sizeof(mlx_texture_t *) * NUM_PLAYER_SPRITES);
 	if (!p->up.text)
 		return (false);
 	p->up.num_frames = NUM_PLAYER_SPRITES;
+	printf("Initializing up animation: %s\n", PLAYER_UP_1);
 	p->up.text[0] = mlx_load_png(PLAYER_UP_1);
+	if (!p->up.text[0])
+	{
+		ft_putendl_fd("Error: Can't load player up animation img 0", 2);
+		return (false);
+	}
 	p->up.text[1] = mlx_load_png(PLAYER_UP_2);
 	p->up.text[2] = mlx_load_png(PLAYER_UP_3);
 	p->up.imgs = malloc(sizeof(mlx_image_t *) * NUM_PLAYER_SPRITES);
@@ -67,9 +68,6 @@ static bool init_anim_up(t_character *p, mlx_t *mlx)
 
 static bool	init_anim_right(t_character *p, mlx_t *mlx)
 {
-	uint16_t	i;
-
-	i = 0;
 	p->right.text = malloc(sizeof(mlx_texture_t *) * NUM_PLAYER_SPRITES);
 	if (!p->right.text)
 		return (false);
@@ -91,9 +89,6 @@ static bool	init_anim_right(t_character *p, mlx_t *mlx)
 
 static bool	init_anim_left(t_character *p, mlx_t *mlx)
 {
-	uint16_t	i;
-
-	i = 0;
 	p->left.text = malloc(sizeof(mlx_texture_t *) * NUM_PLAYER_SPRITES);
 	if (!p->left.text)
 		return (false);
