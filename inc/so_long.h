@@ -61,6 +61,9 @@ typedef	struct s_character
 	mlx_image_t **curr_imgs;
 	uint16_t	curr_num_frames;
 	bool		looking_left;
+	t_dir		dir;
+	t_dir		wish_dir;
+	double		speed_px_s;
 }	t_character;
 
 typedef	struct s_npc
@@ -87,7 +90,7 @@ typedef	struct s_map
 	int32_t			**arr;
 	uint16_t		**collision_map;
 	size_t			height;
-	size_t			weight;
+	size_t			width;
 	t_collectible	*collects;
 	uint16_t		num_collects;
 	t_pos			exit_pos;
@@ -113,6 +116,7 @@ typedef	struct s_solong
 	mlx_image_t		*hud_db;
 	mlx_image_t		*hud_text_img;
 	mlx_image_t 	*hud_foreground;
+	double			center_epsilon_px; // ~0.5 * step @90 FPS
 
 }	t_solong;
 
@@ -149,5 +153,14 @@ bool	init_enemy_right(t_character *e, mlx_t *mlx, char *one, char *two);
 bool	init_enemy_left(t_character *e, mlx_t *mlx, char *one, char *two);
 
 bool	free_all(t_solong *so);
+
+
+int32_t	is_inside_map(const t_map *m, int32_t tile_x, int32_t tile_y);
+int32_t	is_wall(const t_map *m, int32_t tile_x, int32_t tile_y);
+int32_t	is_walkable(const t_map *m, int32_t tile_x, int32_t tile_y);
+void	get_tile_and_center(t_pos pos, t_int2 *tilepos, t_pos *out);
+void	dir_to_vec(t_dir d, int32_t *dir_x, int32_t *dir_y);
+int32_t	is_centered(const t_solong *so, t_pos pos);
+int32_t	can_move_dir_from_tile(const t_solong *so, t_int2 tilepos, t_dir d);
 
 #endif

@@ -22,7 +22,7 @@ void	print_map(t_map *map, t_solong *so)
 	while (i < map->height)
 	{
 		j = 0;
-		while (j < map->weight)
+		while (j < map->width)
 		{
 			if (map->arr[i][j] == 1)
 			{

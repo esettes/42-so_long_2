@@ -12,18 +12,74 @@
 
 #include "so_long.h"
 
+bool	detect_wall(t_solong *so, double x, double y)
+{
+	if (so->map->arr[(int)y / TILESIZE][(int)x / TILESIZE] == 1)
+	{
+		// if (so->map->arr[(int)(y - TILESIZE) / TILESIZE][(int)(x - TILESIZE) / TILESIZE] == 0)
+		// 	return (true);
+		return (true);
+	}
+	
+	return (false);
+}
+
 void	update_sprites_position(t_character *p, double x, double y, t_solong *so)
 {
 	//size_t	i;
 	double	tmp_x;
 	double	tmp_y;
+	t_int2	tilepos;
+	t_pos	center_pos;
+	t_int2	dir;
+	t_int2	ahead_t;
 
 	//i = 0;
+	get_tile_and_center(p->pos, &tilepos, &center_pos);
+	if (is_centered(so, p->pos))
+	{
+		if (p->wish_dir != DIR_NONE && can_move_dir_from_tile(so, tilepos, p->wish_dir))
+			p->dir = p->wish_dir;
+	}
+	// if current dir is blocked, stop and snap to center
+	if (p->dir != DIR_NONE)
+	{
+		dir_to_vec(p->dir, &dir.x, &dir.y);
+		ahead_t.x = tilepos.x + dir.x;
+		ahead_t.y = tilepos.y + dir.y;
+		if (!is_walkable(so->map, ahead_t.x, ahead_t.y))
+		{
+			p->pos.x = center_pos.x;
+			p->pos.y = center_pos.y;
+			p->dir = DIR_NONE;
+		}
+	}
+	
+
+
+
 	tmp_x = (p->pos.x + x);// * p->velocity.x;
 	tmp_y = (p->pos.y + y);// * p->velocity.y;
-	p->pos.x = ft_clampd(tmp_x, 0, so->map->weight * TILESIZE);
-	p->pos.y = ft_clampd(tmp_y, 0, (so->map->height * TILESIZE));
+	if (!detect_wall(so, tmp_x, tmp_y))
+	{
+		p->pos.x = ft_clampd(tmp_x, 0, so->map->width * TILESIZE);
+		p->pos.y = ft_clampd(tmp_y, 0, (so->map->height * TILESIZE));
+	}
+	
 	// printf("player pos: x[%f] y[%f]\n", p->pos.x, p->pos.y);
+}
+
+void	go_ahead(t_character *p, double step, t_solong *so)
+{
+	t_int2	dir;
+	double	step;
+	
+	if (p->dir != DIR_NONE)
+	{
+		dir_to_vec(p->dir, &dir.x, &dir.y);
+		update_sprites_position(p, dir.x * step, dir.y * step, so);
+
+	}
 }
 
 void	animation_hook(mlx_image_t **sprites, t_character *npc, long now, int32_t num_sprites)
@@ -114,14 +170,14 @@ void	fps_hook(void *param)
 	t_solong	*so;
 	//bool		jump_press;
 	long		curr_time;
-	// long		elapsed_time;
-	// long		target_frame_dur;
+	long		elapsed_time;
+	long		target_frame_dur;
 	//bool		any_dir;
 
 	so = (t_solong *)param;
 	curr_time = get_time_ms();	
-	// elapsed_time = curr_time - so->last_ms;
-	// target_frame_dur = 1000 / TARGET_FPS;
+	elapsed_time = curr_time - so->last_ms;
+	target_frame_dur = 1000 / TARGET_FPS;
 	//jump_press = mlx_is_key_down(so->mlx, MLX_KEY_SPACE);
 	//any_dir = false;
 	// if (jump_press && !so->player.prev_jump_press)
@@ -139,7 +195,7 @@ void	fps_hook(void *param)
 		so->player.velocity.y = -200.0;
 		update_sprites_position(&so->player, 0, -2, so);
 		// any_dir = true;
-		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
+		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	if (mlx_is_key_down(so->mlx, MLX_KEY_DOWN))
 	{
@@ -147,7 +203,7 @@ void	fps_hook(void *param)
 		so->player.velocity.y = 200.0;
 		update_sprites_position(&so->player, 0, 2, so);
 		// any_dir = true;
-		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
+		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	
 	if (mlx_is_key_down(so->mlx, MLX_KEY_LEFT))
@@ -157,7 +213,7 @@ void	fps_hook(void *param)
 		update_sprites_position(&so->player, -2, 0, so);
 		// so->player.looking_left = true;
 		// any_dir = true;
-		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
+		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_RIGHT))
 	{
@@ -166,7 +222,7 @@ void	fps_hook(void *param)
 		update_sprites_position(&so->player, 2, 0, so);
 		so->player.looking_left = false;
 		// any_dir = true;
-		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
+		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	else
     {
@@ -186,11 +242,11 @@ void	fps_hook(void *param)
 	// render_interpolated(so,  so->player.curr_imgs[0]);
 	// render_interpolated(so,  so->player.curr_imgs[1]);
 	// render_interpolated(so,  so->player.curr_imgs[2]);
-	// if (elapsed_time >= target_frame_dur)
-	// {
-	// 	so->last_ms += target_frame_dur;
-	// 	print_player_pos(so);
-	// 	animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
-	// }
+	if (elapsed_time >= target_frame_dur)
+	{
+		so->last_ms += target_frame_dur;
+		//print_player_pos(so);
+		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
+	}
 	
 }

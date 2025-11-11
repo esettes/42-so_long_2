@@ -37,6 +37,15 @@ typedef enum e_map_typos
 	M_EXIT
 }	t_map_typos;
 
+typedef enum e_dir
+{
+	DIR_NONE = 0,
+	DIR_LEFT,
+	DIR_RIGHT,
+	DIR_UP,
+	DIR_DOWN
+}	t_dir;
+
 typedef uint16_t t_tile_flags;
 
 enum e_tile_flags{

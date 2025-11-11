@@ -60,6 +60,9 @@ bool init_player(t_solong *so, t_character *p)
 	p->hitbox.x = TILESIZE / 2;
 	p->hitbox.y = TILESIZE / 2;
 	p->looking_left = false;
+	p->wish_dir = DIR_NONE;
+	p->dir = DIR_NONE;
+	p->speed_px_s = 200.0; // 200 pixels per second
 	if (!init_player_anims(so))
 		return (false);
 	if (!put_first_sprites_to_win(p, so->mlx))

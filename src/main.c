@@ -57,7 +57,7 @@ int32_t main(int32_t argc, char **argv)
 	   init_player (which creates images via mlx_texture_to_image) must be
 	   called after mlx is initialized. */
 	solong.player.curr_frame = now;
-	solong.mlx = mlx_init(solong.map->weight * TILESIZE, solong.map->height * TILESIZE, "Pacman!", true);
+	solong.mlx = mlx_init(solong.map->width * TILESIZE, solong.map->height * TILESIZE, "Pacman!", true);
 	if (!solong.mlx)
 	{
 		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
@@ -71,7 +71,7 @@ int32_t main(int32_t argc, char **argv)
 	mlx_resize_image(solong.cell_tile, TILESIZE, TILESIZE);
 	//solong.hud_db = mlx_new_image(solong.mlx, 180, 20);
 	//realloc_map(solong.map->arr, &solong);
-	solong.background = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
+	solong.background = mlx_new_image(solong.mlx, solong.map->width * TILESIZE, solong.map->height * TILESIZE);
 	//solong.hud_foreground = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
 	mlx_set_icon(solong.mlx, game_icon);
 	/* We can free the texture after passing it to mlx as icon. */
