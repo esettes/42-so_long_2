@@ -12,7 +12,7 @@
 
 #include "so_long.h"
 
-bool	init_anim_down(t_character *p, mlx_t *mlx)
+static bool	init_anim_down(t_character *p, mlx_t *mlx)
 {
 	uint16_t	i;
 
@@ -28,13 +28,15 @@ bool	init_anim_down(t_character *p, mlx_t *mlx)
 	if (!p->down.imgs)
 		return (false);
 	p->down.imgs[0] = mlx_texture_to_image(mlx, p->down.text[0]);
+	mlx_resize_image(p->down.imgs[0], TILESIZE, TILESIZE);
 	p->down.imgs[1] = mlx_texture_to_image(mlx, p->down.text[1]);
+	mlx_resize_image(p->down.imgs[1], TILESIZE, TILESIZE);
 	p->down.imgs[2] = mlx_texture_to_image(mlx, p->down.text[2]);
+	mlx_resize_image(p->down.imgs[2], TILESIZE, TILESIZE);
 	return (true);
-	
 }
 
-bool init_anim_up(t_character *p, mlx_t *mlx)
+static bool init_anim_up(t_character *p, mlx_t *mlx)
 {
 	uint16_t	i;
 
@@ -50,12 +52,15 @@ bool init_anim_up(t_character *p, mlx_t *mlx)
 	if (!p->up.imgs)
 		return (false);
 	p->up.imgs[0] = mlx_texture_to_image(mlx, p->up.text[0]);
+	mlx_resize_image(p->up.imgs[0], TILESIZE, TILESIZE);
 	p->up.imgs[1] = mlx_texture_to_image(mlx, p->up.text[1]);
+	mlx_resize_image(p->up.imgs[1], TILESIZE, TILESIZE);
 	p->up.imgs[2] = mlx_texture_to_image(mlx, p->up.text[2]);
+	mlx_resize_image(p->up.imgs[2], TILESIZE, TILESIZE);
 	return (true);
 }
 
-bool	init_anim_right(t_character *p, mlx_t *mlx)
+static bool	init_anim_right(t_character *p, mlx_t *mlx)
 {
 	uint16_t	i;
 
@@ -71,12 +76,15 @@ bool	init_anim_right(t_character *p, mlx_t *mlx)
 	if (!p->right.imgs)
 		return (false);
 	p->right.imgs[0] = mlx_texture_to_image(mlx, p->right.text[0]);
+	mlx_resize_image(p->right.imgs[0], TILESIZE, TILESIZE);
 	p->right.imgs[1] = mlx_texture_to_image(mlx, p->right.text[1]);
+	mlx_resize_image(p->right.imgs[1], TILESIZE, TILESIZE);
 	p->right.imgs[2] = mlx_texture_to_image(mlx, p->right.text[2]);
+	mlx_resize_image(p->right.imgs[2], TILESIZE, TILESIZE);
 	return (true);
 }
 
-bool	init_anim_left(t_character *p, mlx_t *mlx)
+static bool	init_anim_left(t_character *p, mlx_t *mlx)
 {
 	uint16_t	i;
 
@@ -92,20 +100,23 @@ bool	init_anim_left(t_character *p, mlx_t *mlx)
 	if (!p->left.imgs)
 		return (false);
 	p->left.imgs[0] = mlx_texture_to_image(mlx, p->left.text[0]);
+	mlx_resize_image(p->left.imgs[0], TILESIZE, TILESIZE);
 	p->left.imgs[1] = mlx_texture_to_image(mlx, p->left.text[1]);
+	mlx_resize_image(p->left.imgs[1], TILESIZE, TILESIZE);
 	p->left.imgs[2] = mlx_texture_to_image(mlx, p->left.text[2]);
+	mlx_resize_image(p->left.imgs[2], TILESIZE, TILESIZE);
 	return (true);
 }
 
-
-// init player animations
 bool	init_player_anims(t_solong *so)
 {
-	if (!init_anim(&so->player.right)
-		|| !init_anim(&so->player.left)
-		|| !init_anim(&so->player.up)
-		|| !init_anim(&so->player.down)
-		|| !init_anim(&so->player.idle))
+	if (!init_anim_up(&so->player, so->mlx))
+		return (false);
+	if (!init_anim_down(&so->player, so->mlx))
+		return (false);
+	if (!init_anim_right(&so->player, so->mlx))
+		return (false);
+	if (!init_anim_left(&so->player, so->mlx))
 		return (false);
 	return (true);
 }

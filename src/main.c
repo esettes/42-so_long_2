@@ -42,45 +42,30 @@ void ft_hook(void* param)
 
 int32_t main(int32_t argc, char **argv)
 {
-	t_solong solong;
-	long now;
+	t_solong		solong;
 	mlx_texture_t *game_icon;
-
+	long			now;
 
 	(void)argc;
 	now = get_time_ms();
-
-
 	
-	solong.map = malloc(sizeof(t_map));
-
-	
-	
-	solong.last_ms = now;
-	solong.fps = 0;
-	solong.last_fps_update = now;
+	if (!init_solong(&solong, argv[1]))
+	{
+		ft_putendl_fd("Error: Can't init so_long struct.", 2);
+		return (free_all(&solong), 1);
+	}
 	solong.player.last_anim_time = now;
 	
 	solong.player.curr_frame = now;
-	solong.player.velocity.x = 0.0;
-	solong.player.velocity.y = 0.0;
-
-	solong.accum_ms = 0;
-	if (!read_file(&solong, argv[1]))
-	{
-		ft_putendl_fd("Error: Can't open file.", 2);
-		return (1);
-	}
 	solong.mlx = mlx_init(solong.map->weight * TILESIZE, solong.map->height * TILESIZE, "Pacman!", true);
 	game_icon = mlx_load_png(PLAYER_RIGHT_2);
-	// icon = mlx_new_image(solong.mlx, TILESIZE, TILESIZE);
 	if (!solong.mlx)
 	{
 		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
 		return(1);
 	}
 
-		printf("cell path; %s\n", CELL_TEXTURE);
+	printf("cell path; %s\n", CELL_TEXTURE);
 	solong.text_cell = mlx_load_png(CELL_TEXTURE);
 	solong.cell_tile = mlx_texture_to_image(solong.mlx, solong.text_cell);
 	mlx_resize_image(solong.cell_tile, TILESIZE, TILESIZE);
@@ -88,7 +73,7 @@ int32_t main(int32_t argc, char **argv)
 	//realloc_map(solong.map->arr, &solong);
 	solong.background = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
 	//solong.hud_foreground = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
-	//mlx_set_icon(solong.mlx, game_icon);
+	mlx_set_icon(solong.mlx, game_icon);
 	for (uint32_t i = 0; i < solong.background->width; ++i)
 	{
 		for (uint32_t y = 0; y < solong.background->height; ++y)
@@ -159,7 +144,7 @@ int32_t main(int32_t argc, char **argv)
 	mlx_close_hook(solong.mlx, fps_hook, &solong);
 	mlx_close_window(solong.mlx);
 	mlx_terminate(solong.mlx);
-
+	free_all(&solong);
 	
 
 	return (MLX_SUCCESS);

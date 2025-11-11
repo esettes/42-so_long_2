@@ -56,11 +56,11 @@ bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
 			}
 			if (line[j] == 'C')
 			{
-				//so->map->num_collectibles++;
+				so->map->num_collects++;
 			}
 			if (line[j] == 'E')
 			{
-				// enemyes
+				// EXIT
 			}
 			so->map->arr[k][j] = 0;
 		}

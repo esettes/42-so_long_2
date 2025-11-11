@@ -39,7 +39,7 @@ typedef struct anim
 {
 	mlx_texture_t	**text;
 	mlx_image_t		**imgs;
-	size_t			num_frames;
+	uint16_t		num_frames;
 }               t_anim;
 
 /**
@@ -73,15 +73,23 @@ typedef	struct s_npc
 }	t_npc;
 
 
+typedef struct s_collectible
+{
+	t_pos		pos;
+	t_anim		anim;
+}	t_collectible;
+
+
 typedef	struct s_map
 {
 	char			**raw;
 	int32_t			**arr;
 	uint16_t		**collision_map;
-	uint16_t		**height_map;	// pixels
 	size_t			height;
 	size_t			weight;
-	size_t			num_platforms;
+	t_collectible	*collects;
+	uint16_t		num_collects;
+	t_pos			exit_pos;
 }	t_map;
 
 
@@ -97,17 +105,18 @@ typedef	struct s_solong
 	mlx_image_t		*cell_tile;
 	uint16_t		num_enemies;
 	t_character		*enemies;
-	long		last_ms;
-	int			fps;
-	int			last_fps_update;
-	long		accum_ms;
-	mlx_image_t	*hud_db;
-	mlx_image_t	*hud_text_img;
-	mlx_image_t *hud_foreground;
+	long			last_ms;
+	int				fps;
+	int				last_fps_update;
+	long			accum_ms;
+	mlx_image_t		*hud_db;
+	mlx_image_t		*hud_text_img;
+	mlx_image_t 	*hud_foreground;
+
 }	t_solong;
 
 bool	read_file(t_solong *so, char *file);
-
+bool	init_solong(t_solong *so, char *file);
 
 void	parse_array(int32_t **map, size_t w, size_t h);
 bool	resize_pixels(xpm_t *xpm, uint32_t new_w, uint32_t new_h);
@@ -129,4 +138,14 @@ void	print_map(t_map *map, t_solong *so);
 
 // void	init_collision_flags(t_solong *so);
 // void	init_height_map(t_solong *so);
+bool	init_emenies(t_solong *so);
+bool	init_player_anims(t_solong *so);
+///////////////////// Animations initialization
+bool	init_enemy_down(t_character *e, mlx_t *mlx, char *one, char *two);
+bool	init_enemy_up(t_character *e, mlx_t *mlx, char *one, char *two);
+bool	init_enemy_right(t_character *e, mlx_t *mlx, char *one, char *two);
+bool	init_enemy_left(t_character *e, mlx_t *mlx, char *one, char *two);
+
+bool	free_all(t_solong *so);
+
 #endif

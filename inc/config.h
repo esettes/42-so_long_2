@@ -27,8 +27,6 @@
 #define	DRAG		2.0f
 #define	GROUND		(TILESIZE * 12) - (TILESIZE)
 
-
-
 typedef enum e_map_typos
 {
 	M_SPACE = 0,
@@ -116,5 +114,10 @@ enum e_tile_flags{
 #define ENEMY_PINK_LEFT_2 ASSET_DIR	"/pink_left_2.png"
 
 #define CELL_TEXTURE ASSET_DIR	"/cell.png"
+
+#define COLLECT_1 ASSET_DIR	"/cherry.png"
+#define COLLECT_2 ASSET_DIR	"/strawberry.png"
+#define COLLECT_3 ASSET_DIR	"/orange.png"
+#define COLLECT_4 ASSET_DIR	"/apple.png"
 
 #endif

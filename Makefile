@@ -26,7 +26,13 @@ SRCNAMES	= main.c \
 			fps_controller.c \
 			physics_controller.c \
 			HUD.c \
-			print_map.c
+			print_map.c\
+			init_anim_player.c \
+			init_enemies.c \
+			init_anim_enemy.c \
+			init_so_long.c \
+			init_player.c \
+			init_collectibles.c
 
 SRC			= $(addprefix $(SRCDIR), $(SRCNAMES))
 
