@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rstancu <rstancu@student.42.fr>            #+#  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-11-11 09:49:21 by rstancu           #+#    #+#             */
-/*   Updated: 2025-11-11 09:49:21 by rstancu          ###   ########.fr       */
+/*   Created: 2025/11/11 09:49:21 by rstancu           #+#    #+#             */
+/*   Updated: 2025/11/11 13:39:40 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,17 @@ bool init_player(t_solong *so, t_character *p)
 		return (false);
 	if (!put_first_sprites_to_win(p, so->mlx))
 		return (false);
+	/* Enable the initial sprite so the player is visible on start. Set the
+	   current animation to 'down' (facing down) and enable its first frame. */
+	p->curr_imgs = p->down.imgs;
+	p->curr_num_frames = p->down.num_frames;
+	p->curr_frame = 0;
+	p->last_anim_time = get_time_ms();
+	if (p->curr_imgs && p->curr_imgs[0])
+	{
+		p->curr_imgs[0]->instances[0].enabled = true;
+		p->curr_imgs[0]->instances[0].x = (int)p->pos.x;
+		p->curr_imgs[0]->instances[0].y = (int)p->pos.y;
+	}
 	return (true);
 }

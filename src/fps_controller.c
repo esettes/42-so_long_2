@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:08:07 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/11 13:18:47 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/11 13:40:12 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,14 +114,14 @@ void	fps_hook(void *param)
 	t_solong	*so;
 	//bool		jump_press;
 	long		curr_time;
-	long		elapsed_time;
-	long		target_frame_dur;
+	// long		elapsed_time;
+	// long		target_frame_dur;
 	//bool		any_dir;
 
 	so = (t_solong *)param;
 	curr_time = get_time_ms();	
-	elapsed_time = curr_time - so->last_ms;
-	target_frame_dur = 1000 / TARGET_FPS;
+	// elapsed_time = curr_time - so->last_ms;
+	// target_frame_dur = 1000 / TARGET_FPS;
 	//jump_press = mlx_is_key_down(so->mlx, MLX_KEY_SPACE);
 	//any_dir = false;
 	// if (jump_press && !so->player.prev_jump_press)

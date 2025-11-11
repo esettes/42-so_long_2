@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 13:23:45 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/11 13:26:30 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/11 13:41:13 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int32_t main(int32_t argc, char **argv)
 	// }
 
 	//mlx_loop_hook(solong.mlx, fps_controller, &solong);
-	//mlx_loop_hook(solong.mlx, fps_hook, &solong);
+	mlx_loop_hook(solong.mlx, fps_hook, &solong);
 	
 	//mlx_key_hook(solong.mlx, &key_hook, &solong);
 	mlx_loop(solong.mlx);
@@ -155,7 +155,6 @@ int32_t main(int32_t argc, char **argv)
 	//mlx_close_hook(solong.mlx, fps_controller, &solong);
 	mlx_close_hook(solong.mlx, fps_hook, &solong);
 	mlx_close_window(solong.mlx);
-	/* Free images and other resources while `mlx` is still valid. */
 	free_all(&solong);
 	mlx_terminate(solong.mlx);
 	
