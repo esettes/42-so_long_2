@@ -26,7 +26,7 @@ void	update_sprites_position(t_character *p, double x, double y, t_solong *so)
 	// printf("player pos: x[%f] y[%f]\n", p->pos.x, p->pos.y);
 }
 
-void	animation_hook(t_solong *so, mlx_image_t **sprites, t_character *npc, long now)
+void	animation_hook(mlx_image_t **sprites, t_character *npc, long now, int32_t num_sprites)
 {
 	// long		elapsed_time;
 	// long		target_frame_dur;
@@ -36,18 +36,17 @@ void	animation_hook(t_solong *so, mlx_image_t **sprites, t_character *npc, long 
 	// if (elapsed_time >= target_frame_dur)
 	// {
 	// 	so->last_ms += target_frame_dur;
-	 (void)so;
 	 (void)sprites;
 		//physics_update(so, now);
 		if (now - npc->last_anim_time >= ANIM_FRAME_INTERVAL)
 		{
-			// npc->curr_frame = (npc->curr_frame + 1) % NUM_PLAYER_WALK_SPRITES;
-			// npc->last_anim_time += ANIM_FRAME_INTERVAL;
+			npc->curr_frame = (npc->curr_frame + 1) % num_sprites;
+			npc->last_anim_time += ANIM_FRAME_INTERVAL;
 			
-			// sprites[npc->curr_frame]->instances[0].enabled = true;
-			// sprites[(npc->curr_frame + NUM_PLAYER_WALK_SPRITES - 1) % NUM_PLAYER_WALK_SPRITES]->instances[0].enabled = false;
-			// sprites[npc->curr_frame]->instances[0].x = npc->pos.x;
-			// sprites[npc->curr_frame]->instances[0].y = npc->pos.y;
+			sprites[npc->curr_frame]->instances[0].enabled = true;
+			sprites[(npc->curr_frame + num_sprites - 1) % num_sprites]->instances[0].enabled = false;
+			sprites[npc->curr_frame]->instances[0].x = npc->pos.x;
+			sprites[npc->curr_frame]->instances[0].y = npc->pos.y;
 			
 		}
 	//}
@@ -102,11 +101,12 @@ void	set_current_anim(t_solong *so, t_character *p, mlx_image_t **imgs, int num)
 	if (p->curr_imgs)
 		unable_sprites(p->curr_imgs, num);
 	p->curr_imgs = imgs;
-	// p->last_anim_time = get_time_ms();
-	// p->curr_frame = 0;
-	// render_interpolated(so,  p->curr_imgs[0]);
-	// render_interpolated(so,  p->curr_imgs[1]);
-	// render_interpolated(so,  p->curr_imgs[2]);
+	p->curr_num_frames = NUM_PLAYER_SPRITES;
+	p->last_anim_time = get_time_ms();
+	p->curr_frame = 0;
+	render_interpolated(so,  p->curr_imgs[0]);
+	render_interpolated(so,  p->curr_imgs[1]);
+	render_interpolated(so,  p->curr_imgs[2]);
 }
 
 void	fps_hook(void *param)
@@ -135,38 +135,41 @@ void	fps_hook(void *param)
 	// }
 	if (mlx_is_key_down(so->mlx, MLX_KEY_UP))
 	{
-		// set_current_anim(so, &so->player, so->player.up, NUM_PLAYER_WALK_SPRITES);
-		// so->player.velocity.y = -200.0;
-		// update_sprites_position(&so->player, 0, -2, so);
+		set_current_anim(so, &so->player, so->player.up.imgs, so->player.up.num_frames);
+		so->player.velocity.y = -200.0;
+		update_sprites_position(&so->player, 0, -2, so);
 		// any_dir = true;
 	}
 	if (mlx_is_key_down(so->mlx, MLX_KEY_DOWN))
 	{
-		// set_current_anim(so, &so->player, so->player.up, NUM_PLAYER_WALK_SPRITES);
-		// so->player.velocity.y = 200.0;
-		// update_sprites_position(&so->player, 0, 2, so);
+		set_current_anim(so, &so->player, so->player.down.imgs, so->player.down.num_frames);
+		so->player.velocity.y = 200.0;
+		update_sprites_position(&so->player, 0, 2, so);
 		// any_dir = true;
 	}
 	
 	if (mlx_is_key_down(so->mlx, MLX_KEY_LEFT))
 	{
-		// set_current_anim(so, &so->player, so->player.walk_left, NUM_PLAYER_WALK_SPRITES);
-		// so->player.velocity.x = -200.0;
-		// update_sprites_position(&so->player, -2, 0, so);
+		set_current_anim(so, &so->player, so->player.left.imgs, so->player.left.num_frames);
+		so->player.velocity.x = -200.0;
+		update_sprites_position(&so->player, -2, 0, so);
 		// so->player.looking_left = true;
 		// any_dir = true;
 	}
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_RIGHT))
 	{
-		// set_current_anim(so, &so->player, so->player.walk_right, NUM_PLAYER_WALK_SPRITES);
-		// so->player.velocity.x = 200.0;
-		// update_sprites_position(&so->player, 2, 0, so);
-		// so->player.looking_left = false;
+		set_current_anim(so, &so->player, so->player.right.imgs, so->player.right.num_frames);
+		so->player.velocity.x = 200.0;
+		update_sprites_position(&so->player, 2, 0, so);
+		so->player.looking_left = false;
 		// any_dir = true;
 	}
 	else
-        so->player.velocity.x = 0.0;
-	physics_update(so, curr_time);
+    {
+		so->player.velocity.x = 0.0;
+		so->player.velocity.y = 0.0;
+	}
+	//physics_update(so, curr_time);
 	
 	// if (!any_dir && so->player.on_ground)
 	// {
@@ -183,7 +186,7 @@ void	fps_hook(void *param)
 	{
 		so->last_ms += target_frame_dur;
 		print_player_pos(so);
-		animation_hook(so, so->player.curr_imgs, &so->player, curr_time);
+		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	
 }

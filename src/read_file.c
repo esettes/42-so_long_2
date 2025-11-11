@@ -57,12 +57,15 @@ bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
 			if (line[j] == 'C')
 			{
 				so->map->num_collects++;
+				so->map->arr[k][j] = M_COLLECTIBLE;
 			}
 			if (line[j] == 'E')
 			{
-				// EXIT
+				so->map->exit_pos.x = (double)(j * TILESIZE);
+				so->map->exit_pos.y = (double)(k * TILESIZE);
+				so->map->arr[k][j] = M_EXIT;
 			}
-			so->map->arr[k][j] = 0;
+			so->map->arr[k][j] = M_SPACE;
 		}
 		else 
 		{

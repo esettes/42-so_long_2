@@ -59,6 +59,7 @@ typedef	struct s_character
 	t_vec2		velocity;
 	t_vec2		hitbox;
 	mlx_image_t **curr_imgs;
+	uint16_t	curr_num_frames;
 	bool		looking_left;
 }	t_character;
 
@@ -117,6 +118,7 @@ typedef	struct s_solong
 
 bool	read_file(t_solong *so, char *file);
 bool	init_solong(t_solong *so, char *file);
+bool init_player(t_solong *so, t_character *p);
 
 void	parse_array(int32_t **map, size_t w, size_t h);
 bool	resize_pixels(xpm_t *xpm, uint32_t new_w, uint32_t new_h);

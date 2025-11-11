@@ -52,6 +52,11 @@ static bool init_anim_up(t_character *p, mlx_t *mlx)
 	if (!p->up.imgs)
 		return (false);
 	p->up.imgs[0] = mlx_texture_to_image(mlx, p->up.text[0]);
+	if (!p->up.imgs[0])
+	{
+		ft_putendl_fd("Error: Can't load player up animation img 0", 2);
+		return (false);
+	}
 	mlx_resize_image(p->up.imgs[0], TILESIZE, TILESIZE);
 	p->up.imgs[1] = mlx_texture_to_image(mlx, p->up.text[1]);
 	mlx_resize_image(p->up.imgs[1], TILESIZE, TILESIZE);

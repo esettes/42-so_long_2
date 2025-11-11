@@ -30,13 +30,7 @@
 typedef enum e_map_typos
 {
 	M_SPACE = 0,
-	M_PLATFORM,
-	M_LADDER_UP,
-	M_LADDER_DOWN,
-	M_LADDER,
 	M_WALL,
-	M_FLOOR,
-	M_CEIL,
 	M_PLAYER,
 	M_COLLECTIBLE,
 	M_ENEMY,

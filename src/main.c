@@ -54,6 +54,11 @@ int32_t main(int32_t argc, char **argv)
 		ft_putendl_fd("Error: Can't init so_long struct.", 2);
 		return (free_all(&solong), 1);
 	}
+	if (!init_player(&solong, &solong.player))
+	{
+		ft_putendl_fd("Error: Can't init player struct.", 2);
+		return (free_all(&solong), 1);
+	}
 	solong.player.last_anim_time = now;
 	
 	solong.player.curr_frame = now;
