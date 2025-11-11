@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 13:24:24 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/08 16:05:44 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/11 10:30:24 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,11 @@ typedef	struct s_character
 typedef	struct s_npc
 {
 	t_pos		pos;		
-	mlx_image_t	*sprite;
+	t_anim		right;
+	t_anim		left;
+	t_anim		up;
+	t_anim		idle;
+	t_anim		down;
 }	t_npc;
 
 
@@ -83,14 +87,16 @@ typedef	struct s_map
 
 typedef	struct s_solong
 {
-	t_map		*map;
-	mlx_image_t	*background;
-	mlx_t		*mlx;
-	mlx_image_t	*screen;
-	t_character	player;
-	t_character	prev_player_status;
+	t_map			*map;
+	mlx_image_t		*background;
+	mlx_t			*mlx;
+	mlx_image_t		*screen;
+	t_character		player;
+	t_character		prev_player_status;
 	mlx_texture_t	*text_cell;
 	mlx_image_t		*cell_tile;
+	uint16_t		num_enemies;
+	t_character		*enemies;
 	long		last_ms;
 	int			fps;
 	int			last_fps_update;
