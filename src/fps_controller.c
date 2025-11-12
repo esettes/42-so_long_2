@@ -27,8 +27,8 @@ bool	detect_wall(t_solong *so, double x, double y)
 void	update_sprites_position(t_character *p, double x, double y, t_solong *so)
 {
 	//size_t	i;
-	double	tmp_x;
-	double	tmp_y;
+	// double	tmp_x;
+	// double	tmp_y;
 	t_int2	tilepos;
 	t_pos	center_pos;
 	t_int2	dir;
@@ -57,29 +57,55 @@ void	update_sprites_position(t_character *p, double x, double y, t_solong *so)
 	
 
 
-
-	tmp_x = (p->pos.x + x);// * p->velocity.x;
-	tmp_y = (p->pos.y + y);// * p->velocity.y;
-	if (!detect_wall(so, tmp_x, tmp_y))
-	{
-		p->pos.x = ft_clampd(tmp_x, 0, so->map->width * TILESIZE);
-		p->pos.y = ft_clampd(tmp_y, 0, (so->map->height * TILESIZE));
-	}
+	(void)so;
+	(void)x;
+	(void)y;
+	// tmp_x = (p->pos.x + x);// * p->velocity.x;
+	// tmp_y = (p->pos.y + y);// * p->velocity.y;
+	// if (!detect_wall(so, tmp_x, tmp_y))
+	// {
+	// 	p->pos.x = ft_clampd(tmp_x, 0, so->map->width * TILESIZE);
+	// 	p->pos.y = ft_clampd(tmp_y, 0, (so->map->height * TILESIZE));
+	// }
 	
 	// printf("player pos: x[%f] y[%f]\n", p->pos.x, p->pos.y);
 }
 
-void	go_ahead(t_character *p, double step, t_solong *so)
+void	go_ahead(t_character *p, double step, t_solong *so, double dt, t_pos tilepos, t_pos center_pos)
 {
 	t_int2	dir;
-	double	step;
+	t_int2	next_tile;
+	t_vec2	next_center;
+	double	dist;
+	double	move;
 	
 	if (p->dir != DIR_NONE)
 	{
 		dir_to_vec(p->dir, &dir.x, &dir.y);
 		update_sprites_position(p, dir.x * step, dir.y * step, so);
-
+		step = p->speed_px_s * dt;
+		next_tile.x = tilepos.x + dir.x;
+		next_tile.y = tilepos.y + dir.y;
+		next_center.x = (next_tile.x + 0.5) * (double)TILESIZE;
+		next_center.y = (next_tile.y + 0.5) * (double)TILESIZE;
+		
+		//distance to the next center along the moving axis
+		if (dir.x != 0)
+		{
+			p->pos.y = center_pos.y;
+			dist = next_center.x - p->pos.x;
+			move = ft_clampd(step, 0, fabs(dist)) * (dir.x); /////// ??
+			p->pos.x += move;
+		}
+		else if (dir.y != 0)
+		{
+			p->pos.x = center_pos.x;
+			dist = next_center.y - p->pos.y;
+			move = ft_clampd(step, 0, fabs(dist)) * (dir.y); /////// ??
+			p->pos.y += move;
+		}
 	}
+	// wrap tunnels
 }
 
 void	animation_hook(mlx_image_t **sprites, t_character *npc, long now, int32_t num_sprites)
@@ -193,7 +219,8 @@ void	fps_hook(void *param)
 	{
 		set_current_anim(so, &so->player, so->player.up.imgs, so->player.up.num_frames);
 		so->player.velocity.y = -200.0;
-		update_sprites_position(&so->player, 0, -2, so);
+		//update_sprites_position(&so->player, 0, -2, so);
+		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		// any_dir = true;
 		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
@@ -201,7 +228,8 @@ void	fps_hook(void *param)
 	{
 		set_current_anim(so, &so->player, so->player.down.imgs, so->player.down.num_frames);
 		so->player.velocity.y = 200.0;
-		update_sprites_position(&so->player, 0, 2, so);
+		//update_sprites_position(&so->player, 0, 2, so);
+		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		// any_dir = true;
 		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
@@ -210,7 +238,8 @@ void	fps_hook(void *param)
 	{
 		set_current_anim(so, &so->player, so->player.left.imgs, so->player.left.num_frames);
 		so->player.velocity.x = -200.0;
-		update_sprites_position(&so->player, -2, 0, so);
+		//update_sprites_position(&so->player, -2, 0, so);
+		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		// so->player.looking_left = true;
 		// any_dir = true;
 		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
@@ -219,7 +248,8 @@ void	fps_hook(void *param)
 	{
 		set_current_anim(so, &so->player, so->player.right.imgs, so->player.right.num_frames);
 		so->player.velocity.x = 200.0;
-		update_sprites_position(&so->player, 2, 0, so);
+		//update_sprites_position(&so->player, 2, 0, so);
+		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		so->player.looking_left = false;
 		// any_dir = true;
 		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);

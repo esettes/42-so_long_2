@@ -157,7 +157,7 @@ bool	free_all(t_solong *so);
 
 int32_t	is_inside_map(const t_map *m, int32_t tile_x, int32_t tile_y);
 int32_t	is_wall(const t_map *m, int32_t tile_x, int32_t tile_y);
-int32_t	is_walkable(const t_map *m, int32_t tile_x, int32_t tile_y);
+int32_t	is_walkable(t_map *m, int32_t tile_x, int32_t tile_y);
 void	get_tile_and_center(t_pos pos, t_int2 *tilepos, t_pos *out);
 void	dir_to_vec(t_dir d, int32_t *dir_x, int32_t *dir_y);
 int32_t	is_centered(const t_solong *so, t_pos pos);

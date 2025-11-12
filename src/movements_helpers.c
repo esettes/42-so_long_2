@@ -16,7 +16,7 @@
 
 int32_t	is_inside_map(const t_map *m, int32_t tile_x, int32_t tile_y)
 {
-	return (tile_x >= 0 && tile_x < m->width && tile_y >= 0 && tile_y < m->height);
+	return (tile_x >= 0 && (size_t)tile_x < m->width && tile_y >= 0 && (size_t)tile_y < m->height);
 }
 
 int32_t	is_wall(const t_map *m, int32_t tile_x, int32_t tile_y)
@@ -28,7 +28,7 @@ int32_t	is_wall(const t_map *m, int32_t tile_x, int32_t tile_y)
 	return (false);
 }
 
-int32_t	is_walkable(const t_map *m, int32_t tile_x, int32_t tile_y)
+int32_t	is_walkable(t_map *m, int32_t tile_x, int32_t tile_y)
 {
 	int32_t	n;
 
@@ -112,5 +112,5 @@ int32_t	can_move_dir_from_tile(const t_solong *so, t_int2 tilepos, t_dir d)
     dir_to_vec(d, &dir_x, &dir_y);
     next_x = tilepos.x + dir_x;
     next_y = tilepos.y + dir_y;
-    return is_walkable(&so->map, next_x, next_y);
+    return is_walkable(so->map, next_x, next_y);
 }
