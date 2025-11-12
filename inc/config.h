@@ -16,16 +16,10 @@
 #define TILESIZE			64
 #define TARGET_FPS			90
 #define ANIM_FRAME_INTERVAL 60	// ms
-
-#define	JUMPBUF_MS	120.0f
-#define COYOTE_MS   120.0f
+#define FOLLOW_SPEED_PX_S	1000.0
 
 #define PHYS_DT_MS	8          // 125 Hz
 #define MAX_ACC_MS	250
-#define	GRAVITY		4800.0f
-#define	JUMP		-1150.0f
-#define	DRAG		2.0f
-#define	GROUND		(TILESIZE * 12) - (TILESIZE)
 
 typedef enum e_map_typos
 {

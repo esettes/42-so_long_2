@@ -48,8 +48,8 @@ void	get_tile_and_center(t_pos pos, t_int2 *tilepos, t_pos *out)
 	int32_t		tx;
 	int32_t		ty;
 
-	tx = (int32_t)(pos.x / TILESIZE);
-	ty = (int32_t)(pos.y / TILESIZE);
+	tx = (int32_t)ft_floor(((double)pos.x / (double)TILESIZE));
+	ty = (int32_t)ft_floor(((double)pos.y / (double)TILESIZE));
 	cx = (tx + 0.5f) * (double)TILESIZE;
 	cy = (ty + 0.5f) * (double)TILESIZE;
 	if (tilepos)
@@ -70,13 +70,22 @@ void	dir_to_vec(t_dir d, int32_t *dir_x, int32_t *dir_y)
 	vx = 0;
 	vy = 0;
 	if (d == DIR_LEFT)
+	{
 		vx = -1;
-	if (d == DIR_RIGHT)
+		
+	}
+	else if (d == DIR_RIGHT)
+	{
 		vx =  1;
-	if (d == DIR_UP)
+	}
+	else if (d == DIR_UP)
+	{
 		vy = -1;
-	if (d == DIR_DOWN)
+	}
+	else if (d == DIR_DOWN)
+	{
 		vy =  1;
+	}
 	if (dir_x)
 		*dir_x = vx;
 	if (dir_y)
@@ -92,6 +101,7 @@ int32_t	is_centered(const t_solong *so, t_pos pos)
 	center_pos.x = 0;
 	center_pos.y = 0;
 	get_tile_and_center(pos, NULL, &center_pos);
+	//pos.x += 32;
 	dir_x = pos.x - center_pos.x;
 	dir_y = pos.y - center_pos.y;
 	if (dir_x > -so->center_epsilon_px && dir_x < so->center_epsilon_px &&
@@ -112,5 +122,6 @@ int32_t	can_move_dir_from_tile(const t_solong *so, t_int2 tilepos, t_dir d)
     dir_to_vec(d, &dir_x, &dir_y);
     next_x = tilepos.x + dir_x;
     next_y = tilepos.y + dir_y;
-    return is_walkable(so->map, next_x, next_y);
+	printf("can_move_dir_from_tile: from (%d,%d) to (%d,%d) dir=%d\n", tilepos.x, tilepos.y, next_x, next_y, d);
+    return (is_walkable(so->map, next_x, next_y));
 }

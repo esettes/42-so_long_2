@@ -49,6 +49,7 @@ typedef struct anim
 typedef	struct s_character
 {
 	t_pos		pos;
+	t_pos		render_pos;
 	t_anim		right;
 	t_anim		left;
 	t_anim		up;
@@ -110,13 +111,15 @@ typedef	struct s_solong
 	uint16_t		num_enemies;
 	t_character		*enemies;
 	long			last_ms;
+	double			last_update_ms;
 	int				fps;
 	int				last_fps_update;
 	long			accum_ms;
 	mlx_image_t		*hud_db;
 	mlx_image_t		*hud_text_img;
 	mlx_image_t 	*hud_foreground;
-	double			center_epsilon_px; // ~0.5 * step @90 FPS
+	double			center_epsilon_px; // 120 fps
+	
 
 }	t_solong;
 
@@ -162,5 +165,7 @@ void	get_tile_and_center(t_pos pos, t_int2 *tilepos, t_pos *out);
 void	dir_to_vec(t_dir d, int32_t *dir_x, int32_t *dir_y);
 int32_t	is_centered(const t_solong *so, t_pos pos);
 int32_t	can_move_dir_from_tile(const t_solong *so, t_int2 tilepos, t_dir d);
+
+double	compute_center_epsilon_px(double speed_px_s);
 
 #endif

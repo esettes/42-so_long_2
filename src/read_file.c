@@ -52,6 +52,8 @@ bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
 			{
 				playerpos->x = (double)(j * TILESIZE);
 				playerpos->y = (double)(k * TILESIZE);
+				so->player.render_pos.x = playerpos->x;
+				so->player.render_pos.y = playerpos->y;
 				printf("parse line player pos x: %f, y: %f\n", so->player.pos.x, so->player.pos.y);
 			}
 			if (line[j] == 'C')

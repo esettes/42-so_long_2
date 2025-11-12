@@ -124,7 +124,7 @@ int32_t main(int32_t argc, char **argv)
 	// 	ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
 	// 	return (1);
 	// }
-	if (mlx_image_to_window(solong.mlx, solong.hud_db, solong.player.pos.x, solong.player.pos.y - 10) == -1)
+	if (mlx_image_to_window(solong.mlx, solong.hud_db, solong.player.render_pos.x, solong.player.render_pos.y - 10) == -1)
 	{
 		mlx_close_window(solong.mlx);
 		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);

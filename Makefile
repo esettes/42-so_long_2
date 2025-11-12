@@ -33,7 +33,8 @@ SRCNAMES	= main.c \
 			init_so_long.c \
 			init_player.c \
 			init_collectibles.c \
-			movements_helpers.c
+			movements_helpers.c \
+			epsilon.c
 
 SRC			= $(addprefix $(SRCDIR), $(SRCNAMES))
 
