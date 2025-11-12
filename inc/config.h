@@ -14,13 +14,13 @@
 # define CONFIG_H
 
 #define TILESIZE			64
-#define TARGET_FPS			120
+#define TARGET_FPS			90
 #define ANIM_FRAME_INTERVAL 60	// ms
 
 #define	JUMPBUF_MS	120.0f
 #define COYOTE_MS   120.0f
 
-#define PHYS_DT_MS	6          // 125 Hz
+#define PHYS_DT_MS	8          // 125 Hz
 #define MAX_ACC_MS	250
 #define	GRAVITY		4800.0f
 #define	JUMP		-1150.0f

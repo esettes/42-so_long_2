@@ -52,13 +52,13 @@ void	get_tile_and_center(t_pos pos, t_int2 *tilepos, t_pos *out)
 	ty = (int32_t)(pos.y / TILESIZE);
 	cx = (tx + 0.5f) * (double)TILESIZE;
 	cy = (ty + 0.5f) * (double)TILESIZE;
-	if (tilepos->x)
+	if (tilepos)
 		tilepos->x = tx;
-	if (tilepos->y)
+	if (tilepos)
 		tilepos->y = ty;
-	if (out->x)
+	if (out)
 		out->x = cx;
-	if (out->y)
+	if (out)
 		out->y = cy;
 }
 

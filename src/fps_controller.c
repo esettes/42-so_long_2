@@ -35,9 +35,14 @@ void	update_sprites_position(t_character *p, double x, double y, t_solong *so)
 	t_int2	ahead_t;
 
 	//i = 0;
+	tilepos.x = 0;
+	tilepos.y = 0;
+	center_pos.x = 0.0;
+	center_pos.y = 0.0;
 	get_tile_and_center(p->pos, &tilepos, &center_pos);
 	if (is_centered(so, p->pos))
 	{
+		printf("centered\n");
 		if (p->wish_dir != DIR_NONE && can_move_dir_from_tile(so, tilepos, p->wish_dir))
 			p->dir = p->wish_dir;
 	}
@@ -218,7 +223,8 @@ void	fps_hook(void *param)
 	if (mlx_is_key_down(so->mlx, MLX_KEY_UP))
 	{
 		set_current_anim(so, &so->player, so->player.up.imgs, so->player.up.num_frames);
-		so->player.velocity.y = -200.0;
+		so->player.velocity.y = -5.0;
+		so->player.dir = DIR_UP;
 		//update_sprites_position(&so->player, 0, -2, so);
 		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		// any_dir = true;
@@ -227,7 +233,8 @@ void	fps_hook(void *param)
 	if (mlx_is_key_down(so->mlx, MLX_KEY_DOWN))
 	{
 		set_current_anim(so, &so->player, so->player.down.imgs, so->player.down.num_frames);
-		so->player.velocity.y = 200.0;
+		so->player.velocity.y = 5.0;
+		so->player.dir = DIR_DOWN;
 		//update_sprites_position(&so->player, 0, 2, so);
 		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		// any_dir = true;
@@ -237,7 +244,8 @@ void	fps_hook(void *param)
 	if (mlx_is_key_down(so->mlx, MLX_KEY_LEFT))
 	{
 		set_current_anim(so, &so->player, so->player.left.imgs, so->player.left.num_frames);
-		so->player.velocity.x = -200.0;
+		so->player.velocity.x = -5.0;
+		so->player.dir = DIR_LEFT;
 		//update_sprites_position(&so->player, -2, 0, so);
 		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		// so->player.looking_left = true;
@@ -247,7 +255,8 @@ void	fps_hook(void *param)
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_RIGHT))
 	{
 		set_current_anim(so, &so->player, so->player.right.imgs, so->player.right.num_frames);
-		so->player.velocity.x = 200.0;
+		so->player.velocity.x = 5.0;
+		so->player.dir = DIR_RIGHT;
 		//update_sprites_position(&so->player, 2, 0, so);
 		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		so->player.looking_left = false;
@@ -275,7 +284,7 @@ void	fps_hook(void *param)
 	if (elapsed_time >= target_frame_dur)
 	{
 		so->last_ms += target_frame_dur;
-		//print_player_pos(so);
+		print_player_pos(so);
 		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	

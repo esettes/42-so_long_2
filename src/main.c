@@ -69,7 +69,7 @@ int32_t main(int32_t argc, char **argv)
 	solong.text_cell = mlx_load_png(CELL_TEXTURE);
 	solong.cell_tile = mlx_texture_to_image(solong.mlx, solong.text_cell);
 	mlx_resize_image(solong.cell_tile, TILESIZE, TILESIZE);
-	//solong.hud_db = mlx_new_image(solong.mlx, 180, 20);
+	solong.hud_db = mlx_new_image(solong.mlx, 180, 20);
 	//realloc_map(solong.map->arr, &solong);
 	solong.background = mlx_new_image(solong.mlx, solong.map->width * TILESIZE, solong.map->height * TILESIZE);
 	//solong.hud_foreground = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
@@ -106,14 +106,14 @@ int32_t main(int32_t argc, char **argv)
 	solong.player.last_anim_time = now;
 
 	// debug
-	// for (uint32_t i = 0; i < solong.hud_db->width; ++i)
-	// {
-	// 	for (uint32_t j = 0; j < solong.hud_db->height; ++j)
-	// 	{
-	// 		uint32_t color = ft_pixel(0, 0, 0, 255);
-	// 		mlx_put_pixel(solong.hud_db, i, j, color);
-	// 	}
-	// }
+	for (uint32_t i = 0; i < solong.hud_db->width; ++i)
+	{
+		for (uint32_t j = 0; j < solong.hud_db->height; ++j)
+		{
+			uint32_t color = ft_pixel(0, 0, 0, 255);
+			mlx_put_pixel(solong.hud_db, i, j, color);
+		}
+	}
 	
 	
 
@@ -124,12 +124,12 @@ int32_t main(int32_t argc, char **argv)
 	// 	ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
 	// 	return (1);
 	// }
-	// if (mlx_image_to_window(solong.mlx, solong.hud_db, solong.player.pos.x, solong.player.pos.y - 10) == -1)
-	// {
-	// 	mlx_close_window(solong.mlx);
-	// 	ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
-	// 	return (1);
-	// }
+	if (mlx_image_to_window(solong.mlx, solong.hud_db, solong.player.pos.x, solong.player.pos.y - 10) == -1)
+	{
+		mlx_close_window(solong.mlx);
+		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
+		return (1);
+	}
 	
 
 	// if (!resize_pixels(xpm, TILESIZE, TILESIZE))
@@ -144,9 +144,9 @@ int32_t main(int32_t argc, char **argv)
 	
 	//mlx_key_hook(solong.mlx, &key_hook, &solong);
 	mlx_loop(solong.mlx);
-	//mlx_delete_image(solong.mlx, solong.hud_db);
-	// if (solong.hud_text_img)
-	// 	mlx_delete_image(solong.mlx, solong.hud_text_img);
+	mlx_delete_image(solong.mlx, solong.hud_db);
+	if (solong.hud_text_img)
+		mlx_delete_image(solong.mlx, solong.hud_text_img);
 	// if (solong.hud_foreground)
 	// 	mlx_delete_image(solong.mlx, solong.hud_foreground);
 	if (solong.background)
