@@ -53,9 +53,6 @@ int32_t main(int32_t argc, char **argv)
 		ft_putendl_fd("Error: Can't init so_long struct.", 2);
 		return (free_all(&solong), 1);
 	}
-	/* Initialize mlx before creating any images/textures for the player.
-	   init_player (which creates images via mlx_texture_to_image) must be
-	   called after mlx is initialized. */
 	solong.player.curr_frame = now;
 	solong.mlx = mlx_init(solong.map->width * TILESIZE, solong.map->height * TILESIZE, "Pacman!", true);
 	if (!solong.mlx)
@@ -65,7 +62,6 @@ int32_t main(int32_t argc, char **argv)
 	}
 	game_icon = mlx_load_png(PLAYER_RIGHT_2);
 
-	printf("cell path; %s\n", CELL_TEXTURE);
 	solong.text_cell = mlx_load_png(CELL_TEXTURE);
 	solong.cell_tile = mlx_texture_to_image(solong.mlx, solong.text_cell);
 	mlx_resize_image(solong.cell_tile, TILESIZE, TILESIZE);
@@ -96,8 +92,6 @@ int32_t main(int32_t argc, char **argv)
 
 	print_map(solong.map, &solong);
 
-	/* Initialize player animations and images now that mlx is ready and
-	   the cell/background images have been created. */
 	if (!init_player(&solong, &solong.player))
 	{
 		ft_putendl_fd("Error: Can't init player struct.", 2);
@@ -105,7 +99,7 @@ int32_t main(int32_t argc, char **argv)
 	}
 	solong.player.last_anim_time = now;
 
-	// debug
+
 	for (uint32_t i = 0; i < solong.hud_db->width; ++i)
 	{
 		for (uint32_t j = 0; j < solong.hud_db->height; ++j)
@@ -114,16 +108,7 @@ int32_t main(int32_t argc, char **argv)
 			mlx_put_pixel(solong.hud_db, i, j, color);
 		}
 	}
-	
-	
 
-	//init_height_map(&solong);
-	// if (mlx_image_to_window(solong.mlx, solong.hud_foreground, 0, 0) == -1)
-	// {
-	// 	mlx_close_window(solong.mlx);
-	// 	ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
-	// 	return (1);
-	// }
 	if (mlx_image_to_window(solong.mlx, solong.hud_db, solong.player.render_pos.x, solong.player.render_pos.y - 10) == -1)
 	{
 		mlx_close_window(solong.mlx);
@@ -131,27 +116,12 @@ int32_t main(int32_t argc, char **argv)
 		return (1);
 	}
 	
-
-	// if (!resize_pixels(xpm, TILESIZE, TILESIZE))
-	// {
-	// 	mlx_close_window(solong.mlx);
-	// 	ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
-	// 	return(1);
-	// }
-
-	//mlx_loop_hook(solong.mlx, fps_controller, &solong);
+	spawn_collectibles(&solong);
+	// print_exit(&solong);
 	mlx_loop_hook(solong.mlx, fps_hook, &solong);
 	
-	//mlx_key_hook(solong.mlx, &key_hook, &solong);
 	mlx_loop(solong.mlx);
-	mlx_delete_image(solong.mlx, solong.hud_db);
-	if (solong.hud_text_img)
-		mlx_delete_image(solong.mlx, solong.hud_text_img);
-	// if (solong.hud_foreground)
-	// 	mlx_delete_image(solong.mlx, solong.hud_foreground);
-	if (solong.background)
-		mlx_delete_image(solong.mlx, solong.background);
-	//free_all(&solong);
+
 	//mlx_close_hook(solong.mlx, fps_controller, &solong);
 	mlx_close_hook(solong.mlx, fps_hook, &solong);
 	mlx_close_window(solong.mlx);

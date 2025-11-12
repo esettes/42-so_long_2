@@ -95,6 +95,7 @@ typedef	struct s_map
 	t_collectible	*collects;
 	uint16_t		num_collects;
 	t_pos			exit_pos;
+	t_anim			exit;
 }	t_map;
 
 
@@ -168,4 +169,11 @@ int32_t	can_move_dir_from_tile(const t_solong *so, t_int2 tilepos, t_dir d);
 
 double	compute_center_epsilon_px(double speed_px_s);
 
+void	spawn_collectibles(t_solong *so);
+bool	init_collectibles(t_solong *so);
+void	get_collectible(t_solong *so);
+
+bool	can_exit(t_solong *so);
+void	print_exit(t_solong *so);
+bool	init_exit(t_solong *so);
 #endif

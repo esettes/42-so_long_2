@@ -30,6 +30,7 @@ bool	init_collectible(t_collectible *c, mlx_t *mlx, char *path)
 	c->anim.num_frames = 1;
 	return (true);
 }
+
 bool	init_collectibles(t_solong *so)
 {
 	uint16_t	i;
@@ -62,5 +63,25 @@ bool	init_collectibles(t_solong *so)
 		}
 		i++;
 	}
+	return (true);
+}
+
+bool	init_exit(t_solong *so)
+{
+	printf("Initializing exit image... %s\n", EXIT_TEXTURE);
+	so->map->exit.text = malloc(sizeof(mlx_texture_t *));
+	if (!so->map->exit.text)
+		return (false);
+	so->map->exit.text[0] = mlx_load_png(EXIT_TEXTURE);
+	if (!so->map->exit.text[0])
+		return (false);
+	so->map->exit.imgs = malloc(sizeof(mlx_image_t *));
+	if (!so->map->exit.imgs)
+		return (false);
+	so->map->exit.imgs[0] = mlx_texture_to_image(so->mlx, so->map->exit.text[0]);
+	if (!so->map->exit.imgs[0])
+		return (false);
+	mlx_resize_image(so->map->exit.imgs[0], TILESIZE, TILESIZE);
+	so->map->exit.num_frames = 1;
 	return (true);
 }

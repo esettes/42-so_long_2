@@ -117,4 +117,6 @@ enum e_tile_flags{
 #define COLLECT_3 ASSET_DIR	"/orange.png"
 #define COLLECT_4 ASSET_DIR	"/apple.png"
 
+#define EXIT_TEXTURE ASSET_DIR	"/exit.png"
+
 #endif

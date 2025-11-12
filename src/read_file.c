@@ -56,18 +56,19 @@ bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
 				so->player.render_pos.y = playerpos->y;
 				printf("parse line player pos x: %f, y: %f\n", so->player.pos.x, so->player.pos.y);
 			}
-			if (line[j] == 'C')
+			else if (line[j] == 'C')
 			{
 				so->map->num_collects++;
 				so->map->arr[k][j] = M_COLLECTIBLE;
 			}
-			if (line[j] == 'E')
+			else if (line[j] == 'E')
 			{
 				so->map->exit_pos.x = (double)(j * TILESIZE);
 				so->map->exit_pos.y = (double)(k * TILESIZE);
 				so->map->arr[k][j] = M_EXIT;
 			}
-			so->map->arr[k][j] = M_SPACE;
+			else
+				so->map->arr[k][j] = M_SPACE;
 		}
 		else 
 		{

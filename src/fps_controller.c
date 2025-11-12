@@ -52,7 +52,7 @@ void update_render_pos(t_character *p, double follow_speed_px_s, double dt)
 
 // If centered, tryapply wish_dir; if blocked ahead, snap and stop
 // Does NOT move the character forward. Movement happens in go_ahead
-void	compute_twist_and_lock(t_character *p, t_solong *so, t_dir dir)
+void	compute_twist_and_lock(t_character *p, t_solong *so)
 {
 	t_int2	tile;
 	t_pos	center;
@@ -60,7 +60,6 @@ void	compute_twist_and_lock(t_character *p, t_solong *so, t_dir dir)
 	t_int2	ahead;
 
 	get_tile_and_center(p->pos, &tile, &center);
-	(void)dir;
 	if (is_centered(so, p->pos))
 	{
 		printf("Centered at tile (%d,%d)\n", tile.x, tile.y);
@@ -83,34 +82,25 @@ void	compute_twist_and_lock(t_character *p, t_solong *so, t_dir dir)
 	}
 }
 
-void	go_ahead(t_character *p, t_solong *so, double dt, t_dir dir)
+void	go_ahead(t_character *p, t_solong *so, double dt)
 {
 	t_int2	step;
 	
 	t_vec2	next_center;
 	double	dist;
 	double	move;
-	t_pos center_pos;
+	t_pos	center_pos;
 	t_int2	tile;
 	t_int2	ahead_t;
 	double	step_px;
 	
 
-	
-	compute_twist_and_lock(p, so, dir);
+	compute_twist_and_lock(p, so);
 	dir_to_vec(p->dir, &step.x, &step.y);
 	get_tile_and_center(p->pos, &tile, &center_pos);
 	// Blocked ahead? Snap to center and stop.
 	ahead_t.x = tile.x + step.x;
 	ahead_t.y = tile.y + step.y;
-	fprintf(stderr,
-    "DBG dir=%d step=(%d,%d) tile=(%d,%d) ahead=(%d,%d) walkable=%d pos=(%.1f,%.1f)\n",
-    p->dir, step.x, step.y,
-    tile.x, tile.y,
-    ahead_t.x, ahead_t.y,
-    is_walkable(so->map, ahead_t.x, ahead_t.y),
-    p->pos.x, p->pos.y);
-
 	if (!is_walkable(so->map, ahead_t.x, ahead_t.y))
 	{
 		p->pos.x = center_pos.x;
@@ -118,10 +108,7 @@ void	go_ahead(t_character *p, t_solong *so, double dt, t_dir dir)
 		p->dir = DIR_NONE;
 		return ;
 	}
-	// // Move toward next center.
-	// next_tile.x = tile.x + step.x; // (ahead_t.x + 0.5) * (double)TILESIZE;
-	// next_tile.y = tile.y + step.y;	// (ahead_t.y + 0.5) * (double)TILESIZE;
-	next_center.x = (ahead_t.x + 0.5) * (double)TILESIZE;// - 32;
+	next_center.x = (ahead_t.x + 0.5) * (double)TILESIZE;
 	next_center.y = (ahead_t.y + 0.5) * (double)TILESIZE;
 	step_px = p->speed_px_s * dt;
 	//distance to the next center along the moving axis
@@ -130,53 +117,22 @@ void	go_ahead(t_character *p, t_solong *so, double dt, t_dir dir)
 		p->pos.y = center_pos.y;
 		
 		dist = next_center.x - p->pos.x;
-		move = ft_clampd(step_px, 0, fabs(dist)) * (step.x); /////// ??
+		move = ft_clampd(step_px, 0, fabs(dist)) * (step.x);
 		p->pos.x += move;
 	}
 	else if (step.y != 0)
 	{
 		p->pos.x = center_pos.x - 32;
 		dist = next_center.y - p->pos.y;
-		move = ft_clampd(step_px, 0, fabs(dist)) * (step.y); /////// ??
+		move = ft_clampd(step_px, 0, fabs(dist)) * (step.y);
 		p->pos.y += move;
 	}
 	get_tile_and_center(p->pos, &tile, &center_pos);
 	if (tile.x < 0)
-	{
-		p->pos.x = ((so->map->width - 0.5) * (double)TILESIZE);//- 32;
-	}
+		p->pos.x = ((so->map->width - 0.5) * (double)TILESIZE);
 	else if (tile.x >= (int32_t)so->map->width)
-	{
 		p->pos.x = (0.5 * (double)TILESIZE);
-	}
 
-
-	// if (p->dir != DIR_NONE)
-	// {
-	// 	compute_twist_and_lock(p, dir.x * step, dir.y * step, so);
-	// 	step = p->speed_px_s * dt;
-	// 	next_tile.x = tilepos.x + dir.x;
-	// 	next_tile.y = tilepos.y + dir.y;
-	// 	next_center.x = (next_tile.x + 0.5) * (double)TILESIZE;
-	// 	next_center.y = (next_tile.y + 0.5) * (double)TILESIZE;
-		
-	// 	//distance to the next center along the moving axis
-	// 	if (dir.x != 0)
-	// 	{
-	// 		p->pos.y = center_pos.y;
-	// 		dist = next_center.x - p->pos.x;
-	// 		move = ft_clampd(step, 0, fabs(dist)) * (dir.x); /////// ??
-	// 		p->pos.x += move;
-	// 	}
-	// 	else if (dir.y != 0)
-	// 	{
-	// 		p->pos.x = center_pos.x;
-	// 		dist = next_center.y - p->pos.y;
-	// 		move = ft_clampd(step, 0, fabs(dist)) * (dir.y); /////// ??
-	// 		p->pos.y += move;
-	// 	}
-	// }
-	
 }
 
 void	animation_hook(mlx_image_t **sprites, t_character *npc, long now, int32_t num_sprites)
@@ -270,7 +226,6 @@ void	fps_hook(void *param)
 	long		elapsed_time;
 	long		target_frame_dur;
 	double		dt;
-	t_dir		wish;
 
 	so = (t_solong *)param;
 	curr_time = get_time_ms();	
@@ -280,20 +235,17 @@ void	fps_hook(void *param)
 	if (dt > 0.05)
         dt = 0.05;
 	so->last_update_ms = curr_time;
-	wish = DIR_NONE;
 	if (mlx_is_key_down(so->mlx, MLX_KEY_UP))
 	{
 		set_current_anim(so, &so->player, so->player.up.imgs, so->player.up.num_frames);
 		so->player.velocity.y = -20.0;
 		so->player.dir = DIR_UP;
-		//go_ahead(&so->player, so, dt);
 	}
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_DOWN))
 	{
 		set_current_anim(so, &so->player, so->player.down.imgs, so->player.down.num_frames);
 		so->player.velocity.y = 20.0;
 		so->player.dir = DIR_DOWN;
-		//go_ahead(&so->player, so, dt);
 	}
 	
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_LEFT))
@@ -301,14 +253,12 @@ void	fps_hook(void *param)
 		set_current_anim(so, &so->player, so->player.left.imgs, so->player.left.num_frames);
 		so->player.velocity.x = -20.0;
 		so->player.dir = DIR_LEFT;
-		// go_ahead(&so->player, so, dt);
 	}
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_RIGHT))
 	{
 		set_current_anim(so, &so->player, so->player.right.imgs, so->player.right.num_frames);
 		so->player.velocity.x = 20.0;
 		so->player.dir = DIR_RIGHT;
-		// go_ahead(&so->player, so, dt);
 	}
 	else
     {
@@ -316,25 +266,16 @@ void	fps_hook(void *param)
 		so->player.velocity.x = 0.0;
 		so->player.velocity.y = 0.0;
 	}
-	//so->player.wish_dir = wish;
-	go_ahead(&so->player, so, dt, wish);
-	
-	// if (!any_dir && so->player.on_ground)
-	// {
-	// 	// if (so->player.looking_left)
-	// 	// 	set_current_anim(so, &so->player, so->player.idle_left, NUM_PLAYER_WALK_SPRITES);
-	// 	// else
-	// 	// 	set_current_anim(so, &so->player, so->player.idle_right, NUM_PLAYER_WALK_SPRITES);
-	// }
-	// render_interpolated(so,  so->player.curr_imgs[0]);
-	// render_interpolated(so,  so->player.curr_imgs[1]);
-	// render_interpolated(so,  so->player.curr_imgs[2]);
+	go_ahead(&so->player, so, dt);
 	if (elapsed_time >= target_frame_dur)
 	{
 		so->last_ms += target_frame_dur;
 		print_player_pos(so);
 		update_render_pos(&so->player, FOLLOW_SPEED_PX_S, dt);
 		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
+		get_collectible(so);
+		if (can_exit(so))
+			mlx_close_window(so->mlx);
 	}
 	
 }

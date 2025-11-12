@@ -1,38 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_map.c                                        :+:      :+:    :+:   */
+/*   player_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rstancu <rstancu@student.42.fr>            #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-11-10 16:03:05 by rstancu           #+#    #+#             */
-/*   Updated: 2025-11-10 16:03:05 by rstancu          ###   ########.fr       */
+/*   Created: 2025-11-12 13:31:47 by rstancu           #+#    #+#             */
+/*   Updated: 2025-11-12 13:31:47 by rstancu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "so_long.h"
 
-void	print_map(t_map *map, t_solong *so)
+void	get_collectible(t_solong *so)
 {
-	size_t	i;
-	size_t	j;
+	uint16_t	i;
+	t_int2		player_tile;
 
+	get_tile_and_center(so->player.pos, &player_tile, NULL);
 	i = 0;
-	while (i < map->height)
+	while (i < so->map->num_collects)
 	{
-		j = 0;
-		while (j < map->width)
+		if ((int32_t)so->map->collects[i].pos.x == player_tile.x
+			&& (int32_t)so->map->collects[i].pos.y == player_tile.y)
 		{
-			if (map->arr[i][j] == 1)
-			{
-				mlx_image_to_window(so->mlx, so->cell_tile, j * TILESIZE, i * TILESIZE);
-
-			}
-			j++;
+			so->map->collects[i].anim.imgs[0]->instances[0].enabled = false;
+			so->map->arr[player_tile.y][player_tile.x] = M_SPACE;
+			return ;
 		}
-		printf("\n");
 		i++;
 	}
-	print_exit(so);
 }

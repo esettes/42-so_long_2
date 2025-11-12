@@ -101,7 +101,6 @@ int32_t	is_centered(const t_solong *so, t_pos pos)
 	center_pos.x = 0;
 	center_pos.y = 0;
 	get_tile_and_center(pos, NULL, &center_pos);
-	//pos.x += 32;
 	dir_x = pos.x - center_pos.x;
 	dir_y = pos.y - center_pos.y;
 	if (dir_x > -so->center_epsilon_px && dir_x < so->center_epsilon_px &&
