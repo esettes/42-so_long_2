@@ -1,38 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_map.c                                        :+:      :+:    :+:   */
+/*   epsilon.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rstancu <rstancu@student.42.fr>            #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-11-10 16:03:05 by rstancu           #+#    #+#             */
-/*   Updated: 2025-11-10 16:03:05 by rstancu          ###   ########.fr       */
+/*   Created: 2025-11-12 10:09:13 by rstancu           #+#    #+#             */
+/*   Updated: 2025-11-12 10:09:13 by rstancu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "so_long.h"
 
-void	print_map(t_map *map, t_solong *so)
+double	compute_center_epsilon_px(double speed_px_s)
 {
-	size_t	i;
-	size_t	j;
+	double	dt_max;
+	double	step_px;
+	double	eps;
+	double	min_eps;
+	double	max_eps;
 
-	i = 0;
-	while (i < map->height)
-	{
-		j = 0;
-		while (j < map->width)
-		{
-			if (map->arr[i][j] == 1)
-			{
-				mlx_image_to_window(so->mlx, so->cell_tile, j * TILESIZE, i * TILESIZE);
-
-			}
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-	print_exit(so);
+	dt_max = 1.0f / (double)TARGET_FPS;
+	step_px = speed_px_s * dt_max;
+	eps = 0.5f * step_px;
+	min_eps = 0.5f;
+	max_eps = 0.25f * (double)TILESIZE;
+	if (eps < min_eps)
+		eps = min_eps;
+	if (eps > max_eps)
+		eps = max_eps;
+	return (eps);
 }

@@ -32,10 +32,10 @@ bool	init_solong(t_solong *so, char *file)
 	so->last_ms = now;
 	so->fps = 0;
 	so->last_fps_update = now;
+	so->last_update_ms = now;
 	so->accum_ms = 0;
 	so->num_enemies = 0;
-	so->fps = 0;
-	so->center_epsilon_px = 1.20f;
+	so->fps = 0; 
 	if (!init_map(so, file))
 		return (false);
 	return (true);

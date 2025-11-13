@@ -14,18 +14,12 @@
 # define CONFIG_H
 
 #define TILESIZE			64
-#define TARGET_FPS			120
+#define TARGET_FPS			90
 #define ANIM_FRAME_INTERVAL 60	// ms
+#define FOLLOW_SPEED_PX_S	1000.0
 
-#define	JUMPBUF_MS	120.0f
-#define COYOTE_MS   120.0f
-
-#define PHYS_DT_MS	6          // 125 Hz
+#define PHYS_DT_MS	8          // 125 Hz
 #define MAX_ACC_MS	250
-#define	GRAVITY		4800.0f
-#define	JUMP		-1150.0f
-#define	DRAG		2.0f
-#define	GROUND		(TILESIZE * 12) - (TILESIZE)
 
 typedef enum e_map_typos
 {
@@ -122,5 +116,7 @@ enum e_tile_flags{
 #define COLLECT_2 ASSET_DIR	"/strawberry.png"
 #define COLLECT_3 ASSET_DIR	"/orange.png"
 #define COLLECT_4 ASSET_DIR	"/apple.png"
+
+#define EXIT_TEXTURE ASSET_DIR	"/exit.png"
 
 #endif

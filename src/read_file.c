@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 17:46:01 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/12 10:15:20 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/13 11:18:07 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,23 +50,27 @@ bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
 		{
 			if (line[j] == 'P')
 			{
-				/* place player at the CENTER of the tile */
-				playerpos->x = (double)((j + 0.5) * TILESIZE);
-				playerpos->y = (double)((k + 0.5) * TILESIZE);
+				playerpos->x = (double)(j * TILESIZE);
+				playerpos->y = (double)(k * TILESIZE);
+				so->player.render_pos.x = playerpos->x;
+				so->player.render_pos.y = playerpos->y;
 				printf("parse line player pos x: %f, y: %f\n", so->player.pos.x, so->player.pos.y);
 			}
-			if (line[j] == 'C')
+			else if (line[j] == 'C')
 			{
 				so->map->num_collects++;
 				so->map->arr[k][j] = M_COLLECTIBLE;
 			}
-			if (line[j] == 'E')
+			else if (line[j] == 'E')
 			{
-				so->map->exit_pos.x = (double)(j * TILESIZE);
-				so->map->exit_pos.y = (double)(k * TILESIZE);
+				/* store exit as tile coordinates (not pixels). Other code
+				   multiplies by TILESIZE when rendering */
+				so->map->exit_pos.x = (double)j;
+				so->map->exit_pos.y = (double)k;
 				so->map->arr[k][j] = M_EXIT;
 			}
-			so->map->arr[k][j] = M_SPACE;
+			else
+				so->map->arr[k][j] = M_SPACE;
 		}
 		else 
 		{

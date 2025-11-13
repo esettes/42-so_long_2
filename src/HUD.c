@@ -21,5 +21,5 @@ void	print_player_pos(t_solong *so)
 	so->hud_db->instances[0].y = y - 10;
 	
 	sprintf(pos_str, "Pos: (%d, %d)", x, y);
-	so->hud_text_img = mlx_put_string(so->mlx, pos_str, (int)(so->player.pos.x), (int)(so->player.pos.y) - 10);
+	so->hud_text_img = mlx_put_string(so->mlx, pos_str, (int)(so->player.render_pos.x), (int)(so->player.render_pos.y) - 10);
 }

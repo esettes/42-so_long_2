@@ -14,38 +14,38 @@
 
 bool	put_first_sprites_to_win(t_character *p, mlx_t *mlx)
 {
-	if (mlx_image_to_window(mlx, p->up.imgs[0], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->up.imgs[0], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
-	if (mlx_image_to_window(mlx, p->up.imgs[1], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->up.imgs[1], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
-	if (mlx_image_to_window(mlx, p->up.imgs[2], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->up.imgs[2], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
 	p->up.imgs[0]->instances[0].enabled = false;
 	p->up.imgs[1]->instances[0].enabled = false;
 	p->up.imgs[2]->instances[0].enabled = false;
-	if (mlx_image_to_window(mlx, p->down.imgs[0], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->down.imgs[0], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
-	if (mlx_image_to_window(mlx, p->down.imgs[1], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->down.imgs[1], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
-	if (mlx_image_to_window(mlx, p->down.imgs[2], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->down.imgs[2], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
 	p->down.imgs[0]->instances[0].enabled = false;
 	p->down.imgs[1]->instances[0].enabled = false;
 	p->down.imgs[2]->instances[0].enabled = false;
-	if (mlx_image_to_window(mlx, p->left.imgs[0], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->left.imgs[0], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
-	if (mlx_image_to_window(mlx, p->left.imgs[1], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->left.imgs[1], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
-	if (mlx_image_to_window(mlx, p->left.imgs[2], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->left.imgs[2], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
 	p->left.imgs[0]->instances[0].enabled = false;
 	p->left.imgs[1]->instances[0].enabled = false;
 	p->left.imgs[2]->instances[0].enabled = false;
-	if (mlx_image_to_window(mlx, p->right.imgs[0], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->right.imgs[0], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
-	if (mlx_image_to_window(mlx, p->right.imgs[1], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->right.imgs[1], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
-	if (mlx_image_to_window(mlx, p->right.imgs[2], p->pos.x, p->pos.y) == -1)
+	if (mlx_image_to_window(mlx, p->right.imgs[2], p->render_pos.x, p->render_pos.y) == -1)
 		return (false);
 	p->right.imgs[0]->instances[0].enabled = false;
 	p->right.imgs[1]->instances[0].enabled = false;
@@ -62,7 +62,8 @@ bool init_player(t_solong *so, t_character *p)
 	p->looking_left = false;
 	p->wish_dir = DIR_NONE;
 	p->dir = DIR_NONE;
-	p->speed_px_s = 200.0; // 200 pixels per second
+	p->speed_px_s = 300.0; // 200 pixels per second
+	so->center_epsilon_px = 0.7;//compute_center_epsilon_px(p->speed_px_s);
 	if (!init_player_anims(so))
 		return (false);
 	if (!put_first_sprites_to_win(p, so->mlx))
@@ -76,8 +77,8 @@ bool init_player(t_solong *so, t_character *p)
 	if (p->curr_imgs && p->curr_imgs[0])
 	{
 		p->curr_imgs[0]->instances[0].enabled = true;
-		p->curr_imgs[0]->instances[0].x = (int)p->pos.x;
-		p->curr_imgs[0]->instances[0].y = (int)p->pos.y;
+		p->curr_imgs[0]->instances[0].x = (int)p->render_pos.x;
+		p->curr_imgs[0]->instances[0].y = (int)p->render_pos.y;
 	}
 	return (true);
 }
