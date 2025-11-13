@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movements_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rstancu <rstancu@student.42.fr>            #+#  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-11-11 13:39:33 by rstancu           #+#    #+#             */
-/*   Updated: 2025-11-11 13:39:33 by rstancu          ###   ########.fr       */
+/*   Created: 2025/11/11 13:39:33 by rstancu           #+#    #+#             */
+/*   Updated: 2025/11/12 10:08:42 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,16 @@ void	get_tile_and_center(t_pos pos, t_int2 *tilepos, t_pos *out)
 	ty = (int32_t)(pos.y / TILESIZE);
 	cx = (tx + 0.5f) * (double)TILESIZE;
 	cy = (ty + 0.5f) * (double)TILESIZE;
-	if (tilepos->x)
+	if (tilepos)
+	{
 		tilepos->x = tx;
-	if (tilepos->y)
 		tilepos->y = ty;
-	if (out->x)
+	}
+	if (out)
+	{
 		out->x = cx;
-	if (out->y)
 		out->y = cy;
+	}
 }
 
 void	dir_to_vec(t_dir d, int32_t *dir_x, int32_t *dir_y)

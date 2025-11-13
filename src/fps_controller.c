@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:08:07 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/11 13:40:12 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/12 10:33:10 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,71 @@ bool	detect_wall(t_solong *so, double x, double y)
 
 void	update_sprites_position(t_character *p, double x, double y, t_solong *so)
 {
-	//size_t	i;
-	// double	tmp_x;
-	// double	tmp_y;
 	t_int2	tilepos;
 	t_pos	center_pos;
 	t_int2	dir;
 	t_int2	ahead_t;
 
-	//i = 0;
 	get_tile_and_center(p->pos, &tilepos, &center_pos);
-	if (is_centered(so, p->pos))
+	/* debug: show tile/center and pos */
+	printf("[DBG] tilepos=(%d,%d) center=(%.1f,%.1f) pos=(%.1f,%.1f)\n", tilepos.x, tilepos.y, center_pos.x, center_pos.y, p->pos.x, p->pos.y);
+
+	/* detect vertex (exact intersection of 4 tiles) */
+	double local_x_in_tile = fmod(p->pos.x, (double)TILESIZE);
+	double local_y_in_tile = fmod(p->pos.y, (double)TILESIZE);
+	double vertex_eps = 0.0001;
+	int on_vertex = ((local_x_in_tile < vertex_eps || fabs(local_x_in_tile - (double)TILESIZE) < vertex_eps) &&
+			(local_y_in_tile < vertex_eps || fabs(local_y_in_tile - (double)TILESIZE) < vertex_eps));
+
+	if (on_vertex && p->wish_dir != DIR_NONE)
 	{
-		if (p->wish_dir != DIR_NONE && can_move_dir_from_tile(so, tilepos, p->wish_dir))
+		/* tx/ty are the indices of the tile to the bottom-right of the
+		   vertex (because integer truncation). The four tiles around the
+		   vertex are: (tx-1,ty-1),(tx,ty-1),(tx-1,ty),(tx,ty). */
+		t_int2 tile_idx;
+		tile_idx.x = (int)(p->pos.x / TILESIZE);
+		tile_idx.y = (int)(p->pos.y / TILESIZE);
+		t_int2 candidate1 = {0, 0};
+		t_int2 candidate2 = {0, 0};
+		if (p->wish_dir == DIR_LEFT)
+		{
+			candidate1.x = tile_idx.x - 1; candidate1.y = tile_idx.y - 1; /* top-left */
+			candidate2.x = tile_idx.x - 1; candidate2.y = tile_idx.y;     /* bottom-left */
+		}
+		else if (p->wish_dir == DIR_RIGHT)
+		{
+			candidate1.x = tile_idx.x;     candidate1.y = tile_idx.y - 1; /* top-right */
+			candidate2.x = tile_idx.x;     candidate2.y = tile_idx.y;     /* bottom-right */
+		}
+		int walkable = 0;
+		if (is_inside_map(so->map, candidate1.x, candidate1.y) && is_walkable(so->map, candidate1.x, candidate1.y))
+			walkable = 1;
+		if (!walkable && is_inside_map(so->map, candidate2.x, candidate2.y) && is_walkable(so->map, candidate2.x, candidate2.y))
+			walkable = 1;
+		printf("[DBG] vertex wish_dir=%d candidates=(%d,%d) and (%d,%d) walkable=%d\n", p->wish_dir, candidate1.x, candidate1.y, candidate2.x, candidate2.y, walkable);
+		if (walkable)
 			p->dir = p->wish_dir;
 	}
-	// if current dir is blocked, stop and snap to center
+
+	if (is_centered(so, p->pos))
+	{
+		if (p->wish_dir != DIR_NONE)
+		{
+			/* compute next tile for wish_dir and print walkable */
+			t_int2 next;
+			dir_to_vec(p->wish_dir, &next.x, &next.y);
+			next.x = tilepos.x + next.x;
+			next.y = tilepos.y + next.y;
+			printf("[DBG] wish_dir=%d next_tile=(%d,%d)", p->wish_dir, next.x, next.y);
+			if (is_inside_map(so->map, next.x, next.y))
+				printf(" map_val=%d\n", so->map->arr[next.y][next.x]);
+			else
+				printf(" map_val=OUT_OF_BOUNDS\n");
+			if (can_move_dir_from_tile(so, tilepos, p->wish_dir))
+				p->dir = p->wish_dir;
+		}
+	}
+	/* if current dir is blocked, stop and snap to center */
 	if (p->dir != DIR_NONE)
 	{
 		dir_to_vec(p->dir, &dir.x, &dir.y);
@@ -54,52 +103,45 @@ void	update_sprites_position(t_character *p, double x, double y, t_solong *so)
 			p->dir = DIR_NONE;
 		}
 	}
-	
-
 
 	(void)so;
 	(void)x;
 	(void)y;
-	// tmp_x = (p->pos.x + x);// * p->velocity.x;
-	// tmp_y = (p->pos.y + y);// * p->velocity.y;
-	// if (!detect_wall(so, tmp_x, tmp_y))
-	// {
-	// 	p->pos.x = ft_clampd(tmp_x, 0, so->map->width * TILESIZE);
-	// 	p->pos.y = ft_clampd(tmp_y, 0, (so->map->height * TILESIZE));
-	// }
-	
-	// printf("player pos: x[%f] y[%f]\n", p->pos.x, p->pos.y);
 }
 
-void	go_ahead(t_character *p, double step, t_solong *so, double dt, t_pos tilepos, t_pos center_pos)
+void	go_ahead(t_character *p, double step, t_solong *so, double dt)
 {
 	t_int2	dir;
 	t_int2	next_tile;
 	t_vec2	next_center;
 	double	dist;
 	double	move;
+	t_int2	cur_tile;
+	t_pos	cur_center;
 	
 	if (p->dir != DIR_NONE)
 	{
 		dir_to_vec(p->dir, &dir.x, &dir.y);
+		/* get current tile and its center from player position */
+		get_tile_and_center(p->pos, &cur_tile, &cur_center);
 		update_sprites_position(p, dir.x * step, dir.y * step, so);
 		step = p->speed_px_s * dt;
-		next_tile.x = tilepos.x + dir.x;
-		next_tile.y = tilepos.y + dir.y;
+		next_tile.x = cur_tile.x + dir.x;
+		next_tile.y = cur_tile.y + dir.y;
 		next_center.x = (next_tile.x + 0.5) * (double)TILESIZE;
 		next_center.y = (next_tile.y + 0.5) * (double)TILESIZE;
 		
 		//distance to the next center along the moving axis
 		if (dir.x != 0)
 		{
-			p->pos.y = center_pos.y;
+			p->pos.y = cur_center.y;
 			dist = next_center.x - p->pos.x;
 			move = ft_clampd(step, 0, fabs(dist)) * (dir.x); /////// ??
 			p->pos.x += move;
 		}
 		else if (dir.y != 0)
 		{
-			p->pos.x = center_pos.x;
+			p->pos.x = cur_center.x;
 			dist = next_center.y - p->pos.y;
 			move = ft_clampd(step, 0, fabs(dist)) * (dir.y); /////// ??
 			p->pos.y += move;
@@ -218,18 +260,33 @@ void	fps_hook(void *param)
 	if (mlx_is_key_down(so->mlx, MLX_KEY_UP))
 	{
 		set_current_anim(so, &so->player, so->player.up.imgs, so->player.up.num_frames);
+		/* request move up; will be applied when player is centered */
+		so->player.wish_dir = DIR_UP;
 		so->player.velocity.y = -200.0;
+		printf("[DBG] UP pressed: wish_dir=%d dir=%d pos=(%.1f,%.1f)\n", so->player.wish_dir, so->player.dir, so->player.pos.x, so->player.pos.y);
+		{
+			t_int2 tilepos; t_pos centerpos; t_int2 next; int centered;
+			get_tile_and_center(so->player.pos, &tilepos, &centerpos);
+			centered = is_centered(so, so->player.pos);
+			dir_to_vec(so->player.wish_dir, &next.x, &next.y);
+			next.x = tilepos.x + next.x; next.y = tilepos.y + next.y;
+			printf("[DBG] KEY_DEBUG tilepos=(%d,%d) center=(%.1f,%.1f) centered=%d next=(%d,%d)", tilepos.x, tilepos.y, centerpos.x, centerpos.y, centered, next.x, next.y);
+			if (is_inside_map(so->map, next.x, next.y))
+				printf(" map_val=%d\n", so->map->arr[next.y][next.x]);
+			else
+				printf(" map_val=OUT_OF_BOUNDS\n");
+		}
 		//update_sprites_position(&so->player, 0, -2, so);
-		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		// any_dir = true;
 		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	if (mlx_is_key_down(so->mlx, MLX_KEY_DOWN))
 	{
 		set_current_anim(so, &so->player, so->player.down.imgs, so->player.down.num_frames);
+		so->player.wish_dir = DIR_DOWN;
 		so->player.velocity.y = 200.0;
+		printf("[DBG] DOWN pressed: wish_dir=%d dir=%d pos=(%.1f,%.1f)\n", so->player.wish_dir, so->player.dir, so->player.pos.x, so->player.pos.y);
 		//update_sprites_position(&so->player, 0, 2, so);
-		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		// any_dir = true;
 		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
@@ -237,9 +294,10 @@ void	fps_hook(void *param)
 	if (mlx_is_key_down(so->mlx, MLX_KEY_LEFT))
 	{
 		set_current_anim(so, &so->player, so->player.left.imgs, so->player.left.num_frames);
+		so->player.wish_dir = DIR_LEFT;
 		so->player.velocity.x = -200.0;
+		printf("[DBG] LEFT pressed: wish_dir=%d dir=%d pos=(%.1f,%.1f)\n", so->player.wish_dir, so->player.dir, so->player.pos.x, so->player.pos.y);
 		//update_sprites_position(&so->player, -2, 0, so);
-		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
 		// so->player.looking_left = true;
 		// any_dir = true;
 		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
@@ -247,17 +305,40 @@ void	fps_hook(void *param)
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_RIGHT))
 	{
 		set_current_anim(so, &so->player, so->player.right.imgs, so->player.right.num_frames);
+		so->player.wish_dir = DIR_RIGHT;
 		so->player.velocity.x = 200.0;
+		printf("[DBG] RIGHT pressed: wish_dir=%d dir=%d pos=(%.1f,%.1f)\n", so->player.wish_dir, so->player.dir, so->player.pos.x, so->player.pos.y);
 		//update_sprites_position(&so->player, 2, 0, so);
-		go_ahead(&so->player, 2.0, so, (double)elapsed_time / 1000.0, so->player.pos, so->player.pos);
+		{
+			/* debug for LEFT/RIGHT: show tile and next tile value */
+			t_int2 tilepos; t_pos centerpos; t_int2 next; int centered;
+			get_tile_and_center(so->player.pos, &tilepos, &centerpos);
+			centered = is_centered(so, so->player.pos);
+			dir_to_vec(so->player.wish_dir, &next.x, &next.y);
+			next.x = tilepos.x + next.x; next.y = tilepos.y + next.y;
+			printf("[DBG] KEY_DEBUG tilepos=(%d,%d) center=(%.1f,%.1f) centered=%d next=(%d,%d)", tilepos.x, tilepos.y, centerpos.x, centerpos.y, centered, next.x, next.y);
+			if (is_inside_map(so->map, next.x, next.y))
+				printf(" map_val=%d\n", so->map->arr[next.y][next.x]);
+			else
+				printf(" map_val=OUT_OF_BOUNDS\n");
+		}
 		so->player.looking_left = false;
 		// any_dir = true;
 		//animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
 	}
 	else
-    {
+	{
 		so->player.velocity.x = 0.0;
 		so->player.velocity.y = 0.0;
+	}
+
+	/* After processing input, run promotion logic (center/vertex checks) so a
+	   wish_dir can become dir before movement is applied. Then call go_ahead
+	   once per tick (it will no-op if dir == DIR_NONE). */
+	update_sprites_position(&so->player, 0.0, 0.0, so);
+	{
+		double dt = (double)elapsed_time / 1000.0;
+		go_ahead(&so->player, 2.0, so, dt);
 	}
 	//physics_update(so, curr_time);
 	

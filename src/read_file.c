@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rstancu <rstancu@student.42.fr>            #+#  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-10-31 17:46:01 by rstancu           #+#    #+#             */
-/*   Updated: 2025-10-31 17:46:01 by rstancu          ###   ########.fr       */
+/*   Created: 2025/10/31 17:46:01 by rstancu           #+#    #+#             */
+/*   Updated: 2025/11/12 10:15:20 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
 		{
 			if (line[j] == 'P')
 			{
-				playerpos->x = (double)(j * TILESIZE);
-				playerpos->y = (double)(k * TILESIZE);
+				/* place player at the CENTER of the tile */
+				playerpos->x = (double)((j + 0.5) * TILESIZE);
+				playerpos->y = (double)((k + 0.5) * TILESIZE);
 				printf("parse line player pos x: %f, y: %f\n", so->player.pos.x, so->player.pos.y);
 			}
 			if (line[j] == 'C')
