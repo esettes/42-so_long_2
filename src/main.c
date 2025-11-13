@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 13:23:45 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/11 13:41:13 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/13 11:31:57 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int32_t main(int32_t argc, char **argv)
 
 
 	print_map(solong.map, &solong);
-
+	
 	if (!init_player(&solong, &solong.player))
 	{
 		ft_putendl_fd("Error: Can't init player struct.", 2);

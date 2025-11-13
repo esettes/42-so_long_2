@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:49:07 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/13 11:28:02 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/13 11:32:58 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ bool	can_exit(t_solong *so)
 			printf("Cannot exit yet, collectibles remaining: %d\n", so->map->num_collects);
 			return (false);
 		}
-		print_exit(so);
 		return (true);
 	}
 	return (false);
