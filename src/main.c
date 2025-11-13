@@ -48,17 +48,17 @@ int32_t main(int32_t argc, char **argv)
 
 	(void)argc;
 	now = get_time_ms();
+	solong.is_running = false;
 	if (!init_solong(&solong, argv[1]))
 	{
-		ft_putendl_fd("Error: Can't init so_long struct.", 2);
-		return (free_all(&solong), 1);
+		return (free_all(&solong));
 	}
 	solong.player.curr_frame = now;
 	solong.mlx = mlx_init(solong.map->width * TILESIZE, solong.map->height * TILESIZE, "Pacman!", true);
 	if (!solong.mlx)
 	{
 		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
-		return (free_all(&solong), 1);
+		return (free_all(&solong));
 	}
 	game_icon = mlx_load_png(PLAYER_RIGHT_2);
 
@@ -68,7 +68,6 @@ int32_t main(int32_t argc, char **argv)
 	solong.hud_db = mlx_new_image(solong.mlx, 180, 20);
 	//realloc_map(solong.map->arr, &solong);
 	solong.background = mlx_new_image(solong.mlx, solong.map->width * TILESIZE, solong.map->height * TILESIZE);
-	//solong.hud_foreground = mlx_new_image(solong.mlx, solong.map->weight * TILESIZE, solong.map->height * TILESIZE);
 	mlx_set_icon(solong.mlx, game_icon);
 	/* We can free the texture after passing it to mlx as icon. */
 	if (game_icon)
@@ -95,7 +94,7 @@ int32_t main(int32_t argc, char **argv)
 	if (!init_player(&solong, &solong.player))
 	{
 		ft_putendl_fd("Error: Can't init player struct.", 2);
-		return (free_all(&solong), 1);
+		return (free_all(&solong));
 	}
 	solong.player.last_anim_time = now;
 
@@ -121,13 +120,9 @@ int32_t main(int32_t argc, char **argv)
 	mlx_loop_hook(solong.mlx, fps_hook, &solong);
 	
 	mlx_loop(solong.mlx);
-
-	//mlx_close_hook(solong.mlx, fps_controller, &solong);
 	mlx_close_hook(solong.mlx, fps_hook, &solong);
 	mlx_close_window(solong.mlx);
 	free_all(&solong);
 	mlx_terminate(solong.mlx);
-	
-
 	return (MLX_SUCCESS);
 }

@@ -14,7 +14,7 @@
 # define CONFIG_H
 
 #define TILESIZE			64
-#define TARGET_FPS			90
+#define TARGET_FPS			120
 #define ANIM_FRAME_INTERVAL 60	// ms
 #define FOLLOW_SPEED_PX_S	1000.0
 

@@ -28,6 +28,7 @@ bool	init_collectible(t_collectible *c, mlx_t *mlx, char *path)
 		return (false);
 	mlx_resize_image(c->anim.imgs[0], TILESIZE, TILESIZE);
 	c->anim.num_frames = 1;
+	c->collected = false;
 	return (true);
 }
 
@@ -37,6 +38,7 @@ bool	init_collectibles(t_solong *so)
 
 	i = 0;
 	so->map->collects = malloc(sizeof(t_collectible) * so->map->num_collects);
+	so->map->original_num_collects = so->map->num_collects;
 	if (!so->map->collects)
 		return (false);
 	while (i < so->map->num_collects)
