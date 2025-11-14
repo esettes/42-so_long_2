@@ -145,7 +145,23 @@ void	free_collectibles(t_solong *so)
 		}
 		i++;
 	}
-	free(so->map->collects);			///////Hereeeeeeeee
+	free(so->map->collects);
+}
+
+void	free_visited(bool **visited, size_t height)
+{
+	size_t	i;
+
+	if (!visited)
+		return ;
+	i = 0;
+	while (i < height)
+	{
+		if (visited[i])
+			free(visited[i]);
+		i++;
+	}
+	free(visited);
 }
 
 void	free_map(t_map *map, mlx_t *mlx)
@@ -174,23 +190,17 @@ bool	free_all(t_solong *so)
 	if (so->is_running)
 	{
 		free_player(so);
-		//free_enemies(so);
 		if (so->cell_tile)
 			mlx_delete_image(so->mlx, so->cell_tile);
 		if (so->text_cell)
 			mlx_delete_texture(so->text_cell);
-		
 		free_exit(so);
 		free_collectibles(so);
 		if (so->background)
 			mlx_delete_image(so->mlx, so->background);
-		if (so->hud_db)
-			mlx_delete_image(so->mlx, so->hud_db);
-		if (so->hud_text_img)
-			mlx_delete_image(so->mlx, so->hud_text_img);
+		if (so->movements_img)
+			mlx_delete_image(so->mlx, so->movements_img);
 		free_map(so->map, so->mlx);
 	}
-	
 	return (false);
 }
-

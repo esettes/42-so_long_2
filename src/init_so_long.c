@@ -41,11 +41,17 @@ bool	init_solong(t_solong *so, char *file)
 	so->last_ms = now;
 	so->last_update_ms = now;
 	so->num_enemies = 0;
-	
+	so->movements_count = 0;
 	if (!init_map(so, file))
 		return (false);
 	if (!check_map_limits(so))
 	{
+		free_map(so->map, so->mlx);
+		return (false);
+	}
+	if (!is_map_playable(so->map, &so->player))
+	{
+		ft_putendl_fd("Error: Map is not playable.", 2);
 		free_map(so->map, so->mlx);
 		return (false);
 	}

@@ -70,7 +70,6 @@ bool	init_collectibles(t_solong *so)
 
 bool	init_exit(t_solong *so)
 {
-	printf("Initializing exit image... %s\n", EXIT_TEXTURE);
 	so->map->exit.text = malloc(sizeof(mlx_texture_t *));
 	if (!so->map->exit.text)
 		return (false);

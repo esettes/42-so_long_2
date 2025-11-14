@@ -127,7 +127,7 @@ void	animation_hook(mlx_image_t **sprites, t_character *npc, long elapsed, int32
 	long		target_frame_dur;
 
 	target_frame_dur = 1000 / TARGET_FPS;
-	elapsed /= 2.0007;
+	elapsed /= 2.00001;
 	(void)sprites;
 	if (elapsed >= target_frame_dur)
 	{
@@ -188,12 +188,14 @@ void	fps_hook(void *param)
 		set_current_anim(so, &so->player, so->player.up.imgs, so->player.up.num_frames);
 		so->player.velocity.y = -20.0;
 		so->player.dir = DIR_UP;
+		so->movements_count++;
 	}
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_DOWN))
 	{
 		set_current_anim(so, &so->player, so->player.down.imgs, so->player.down.num_frames);
 		so->player.velocity.y = 20.0;
 		so->player.dir = DIR_DOWN;
+		so->movements_count++;
 	}
 	
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_LEFT))
@@ -201,12 +203,14 @@ void	fps_hook(void *param)
 		set_current_anim(so, &so->player, so->player.left.imgs, so->player.left.num_frames);
 		so->player.velocity.x = -20.0;
 		so->player.dir = DIR_LEFT;
+		so->movements_count++;
 	}
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_RIGHT))
 	{
 		set_current_anim(so, &so->player, so->player.right.imgs, so->player.right.num_frames);
 		so->player.velocity.x = 20.0;
 		so->player.dir = DIR_RIGHT;
+		so->movements_count++;
 	}
 	else
     {
@@ -214,11 +218,12 @@ void	fps_hook(void *param)
 		so->player.velocity.x = 0.0;
 		so->player.velocity.y = 0.0;
 	}
+	
 	go_ahead(&so->player, so, dt);
 	if (elapsed_time >= target_frame_dur)
 	{
+		print_movements(so);
 		so->last_ms += target_frame_dur;
-		//print_player_pos(so);
 		update_render_pos(&so->player, FOLLOW_SPEED_PX_S, dt);
 		animation_hook(so->player.curr_imgs, &so->player, elapsed_time, so->player.curr_num_frames);
 		get_collectible(so);

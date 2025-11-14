@@ -40,7 +40,6 @@ static bool init_anim_up(t_character *p, mlx_t *mlx)
 	if (!p->up.text)
 		return (false);
 	p->up.num_frames = NUM_PLAYER_SPRITES;
-	printf("Initializing up animation: %s\n", PLAYER_UP_1);
 	p->up.text[0] = mlx_load_png(PLAYER_UP_1);
 	if (!p->up.text[0])
 	{

@@ -22,7 +22,6 @@ void	print_exit(t_solong *so)
 	}
 	if (!mlx_image_to_window(so->mlx, so->map->exit.imgs[0], so->map->exit_pos.x * TILESIZE, so->map->exit_pos.y * TILESIZE))
 	{
-		ft_putendl_fd("Error: Can't put exit image to window.", 2);
 		return ;
 	}
 }
@@ -35,12 +34,8 @@ bool	can_exit(t_solong *so)
 	if ((int32_t)so->map->exit_pos.x == player_tile.x
 		&& (int32_t)so->map->exit_pos.y == player_tile.y)
 	{
-		printf("Player is on exit tile (%d,%d)\n", player_tile.x, player_tile.y);
 		if (so->map->num_collects > 0)
-		{
-			printf("Cannot exit yet, collectibles remaining: %d\n", so->map->num_collects);
 			return (false);
-		}
 		return (true);
 	}
 	return (false);

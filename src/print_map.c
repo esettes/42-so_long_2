@@ -25,13 +25,10 @@ void	print_map(t_map *map, t_solong *so)
 		while (j < map->width)
 		{
 			if (map->arr[i][j] == 1)
-			{
-				mlx_image_to_window(so->mlx, so->cell_tile, j * TILESIZE, i * TILESIZE);
-
-			}
+				mlx_image_to_window(so->mlx, so->cell_tile,
+								j * TILESIZE, i * TILESIZE);
 			j++;
 		}
-		printf("\n");
 		i++;
 	}
 	print_exit(so);

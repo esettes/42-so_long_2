@@ -22,6 +22,7 @@ bool	is_valid_line(char *line)
 		if (!(line[i] == '1' || line[i] == '0' || line[i] == 'P'
 			|| line[i] == 'C' || line[i] == 'E' || line[i] == '\n'))
 			{
+				ft_putendl_fd("Error: Invalid character in map.", 2);
 				return (false);
 			}
 		i++;
@@ -31,7 +32,6 @@ bool	is_valid_line(char *line)
 
 bool	check_num_elemets(t_solong *so)
 {
-	printf("Collectibles: %d, Exits: %d\n", so->map->num_collects, so->map->num_exits);
 	if (so->map->num_exits != 1 || so->map->num_collects < 1)
 	{
 		ft_putendl_fd("Error: Invalid number of collectibles or exits.", 2);
@@ -80,10 +80,10 @@ bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
 			playerpos->y = (double)(k * TILESIZE);
 			so->player.render_pos.x = playerpos->x;
 			so->player.render_pos.y = playerpos->y;
+			so->map->arr[k][j] = M_PLAYER;
 		}
 		else if (line[j] == 'C')
 		{
-			printf("Collectible at x: %zu, y: %zu\n", j, k);
 			so->map->num_collects++;
 			so->map->arr[k][j] = M_COLLECTIBLE;
 		}
@@ -94,38 +94,70 @@ bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
 			so->map->arr[k][j] = M_EXIT;
 			so->map->num_exits++;
 		}
-		else if (line[j] == '0')
-			so->map->arr[k][j] = M_SPACE;
 		else
-		{
-			free_map_from_index(so, k + 1);
-			ft_putendl_fd("Error: Invalid character in map.", 2);
-			return (false);
-		}
+			so->map->arr[k][j] = M_SPACE;
 		j++;
 	}
 	return (true);
 }
 
+ssize_t	check_lines_lenght(int32_t fd, t_solong *so)
+{
+	char	*line;
+	size_t	last_len;
+	ssize_t	lines;
+	bool	same;
+	size_t	len;
+
+	lines = -1;
+	same = true;
+	line = get_next_line(fd);
+	if (!line)
+		return (lines);
+	so->map->width = ft_strlen(line);
+	if (line[so->map->width - 1] == '\n')
+		so->map->width--;
+	lines = 1;
+	while (1)
+	{
+		last_len = ft_strlen(line);
+		free(line);
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		len = ft_strlen(line);
+		if (line[len - 1] != '\n')
+		{
+			ft_putendl_fd("Error: Map need NL at last line.", 2);
+			return (-1);
+		}
+		if (len != last_len)
+			same = false;
+		lines++;
+	}
+	if (!same)
+		return (-1);
+	return (lines);
+}
 
 bool	read_file(t_solong *so, char *file)
 {
 	int32_t	fd;
 	char	*line;
 	size_t	k;
-	size_t	lines;
+	ssize_t	lines;
 
-	lines = 0;
 	k = 0;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (free_all(so));
-	while ((line = get_next_line(fd)))
-	{
-		lines++;
-		free(line);
-	}
+	lines = check_lines_lenght(fd, so);
 	close(fd);
+	if (lines < 1)
+	{
+		ft_putendl_fd("Error: Invalid map. Inconsistent line lengths.", 2);
+		return (false);
+	}
 	so->map->arr = malloc(sizeof(int32_t *) * lines);
 	if (!so->map->arr)
 	{
@@ -140,10 +172,8 @@ bool	read_file(t_solong *so, char *file)
 	}
 	while ((line = get_next_line(fd)))
 	{
-		so->map->width = ft_strlen(line);
 		if (!is_valid_line(line) || !parse_line(so, line, k, &so->player.pos))
 		{
-			ft_putendl_fd("Error: Invalid map file.", 2);
 			free(line);
 			close(fd);
 			free_map_from_index(so, k);
@@ -157,8 +187,8 @@ bool	read_file(t_solong *so, char *file)
 		free_map_from_index(so, k + 1);
 		return (false);
 	}
-	close(fd);
 	so->map->height = lines;
+	close(fd);
 	return (true);
 }
 
