@@ -16,7 +16,7 @@ OBJS = $(addprefix $(OBJDIR), $(SRCNAMES:.c=.o))
 
 LIBS	=  ./inc
 
-CFLAGS =  -Wall -Wextra -Werror -I include -I
+CFLAGS =  -Wall -Wextra -Werror -g3 -I include -I
 
 CC = cc
 

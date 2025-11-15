@@ -121,6 +121,5 @@ int32_t	can_move_dir_from_tile(const t_solong *so, t_int2 tilepos, t_dir d)
     dir_to_vec(d, &dir_x, &dir_y);
     next_x = tilepos.x + dir_x;
     next_y = tilepos.y + dir_y;
-	printf("can_move_dir_from_tile: from (%d,%d) to (%d,%d) dir=%d\n", tilepos.x, tilepos.y, next_x, next_y, d);
     return (is_walkable(so->map, next_x, next_y));
 }

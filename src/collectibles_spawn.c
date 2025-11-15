@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "so_long.h"
 
 void	get_collectibles_pos(t_solong *so)
@@ -26,11 +25,10 @@ void	get_collectibles_pos(t_solong *so)
 		j = 0;
 		while (j < so->map->width)
 		{
-			if (so->map->arr[i][j] == M_COLLECTIBLE)
+			if (so->map->arr[i][j] && so->map->arr[i][j] == M_COLLECTIBLE)
 			{
 				so->map->collects[count].pos.x = j;
 				so->map->collects[count].pos.y = i;
-				printf("Collectible %d at tile (%d,%d) pos (%.1f,%.1f)\n", count, j, i, so->map->collects[count].pos.x, so->map->collects[count].pos.y);
 				count++;
 				if (count == so->map->num_collects)
 					break ;
@@ -46,13 +44,16 @@ void	get_collectibles_pos(t_solong *so)
 void	spawn_collectibles(t_solong *so)
 {
 	uint16_t	i;
+	int32_t		id;
 	
 	i = 0;
 	init_collectibles(so);
 	get_collectibles_pos(so);
 	while (i < so->map->num_collects)
 	{
-		mlx_image_to_window(so->mlx, so->map->collects[i].anim.imgs[0], so->map->collects[i].pos.x  * TILESIZE, so->map->collects[i].pos.y * TILESIZE);
+		so->map->collects[i].img = so->map->collects[i].anim.imgs[0];
+		id = mlx_image_to_window(so->mlx, so->map->collects[i].img, (int32_t)(so->map->collects[i].pos.x  * TILESIZE), (int32_t)(so->map->collects[i].pos.y * TILESIZE));
+		so->map->collects[i].instance_id = id;
 		i++;
 	}
 }

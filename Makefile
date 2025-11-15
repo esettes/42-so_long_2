@@ -19,13 +19,9 @@ endif
 SRCDIR		= ./src/
 SRCNAMES	= main.c \
 			read_file.c \
-			utils.c \
 			parse.c \
-			debug.c \
 			free.c \
 			fps_controller.c \
-			physics_controller.c \
-			HUD.c \
 			print_map.c\
 			init_anim_player.c \
 			init_enemies.c \
@@ -37,7 +33,10 @@ SRCNAMES	= main.c \
 			epsilon.c \
 			collectibles_spawn.c \
 			player_utils.c \
-			exit_utils.c
+			exit_utils.c \
+			map_mandatory.c \
+			dfs.c \
+			print_movements.c
 
 SRC			= $(addprefix $(SRCDIR), $(SRCNAMES))
 
@@ -53,7 +52,7 @@ LDLIBS += -lft -lgnl -lm -pthread
 HEADERS	= -I include -I ./inc/libft/inc/ -I ./inc/gnl/inc/ -I ./inc/  -I ./inc/MLX42/include/MLX42/
 LIBX42_FLAGS	=	-I include -ldl -lglfw
 
-CFLAGS +=   -g3  -Wall -Wextra -Werror -fno-omit-frame-pointer -fsanitize=address
+CFLAGS +=   -g3  -Wall -Wextra -Werror -fno-omit-frame-pointer -fsanitize=leak
 
 PRINT ?= 0
 CFLAGS += -DPRINT=$(PRINT)

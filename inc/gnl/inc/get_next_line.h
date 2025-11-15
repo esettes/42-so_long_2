@@ -40,9 +40,9 @@ typedef struct s_out
 }	t_out;
 
 ssize_t			get_pos_nl(t_read *r, t_out *o, int target);
-void			*ft_memmove(void *dest, const void *src, size_t n);
+void			*f_memmove(void *dest, const void *src, size_t n);
 void			*ft_realloc(void *old_ptr, size_t oldsize, size_t newsize);
-void			*ft_memcpy(void *dest, const void *src, size_t bytes);
+void			*f_memcpy(void *dest, const void *src, size_t bytes);
 char			*get_next_line(int fd);
 void			init_output(t_out *o);
 

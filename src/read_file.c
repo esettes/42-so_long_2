@@ -22,6 +22,7 @@ bool	is_valid_line(char *line)
 		if (!(line[i] == '1' || line[i] == '0' || line[i] == 'P'
 			|| line[i] == 'C' || line[i] == 'E' || line[i] == '\n'))
 			{
+				ft_putendl_fd("Error: Invalid character in map.", 2);
 				return (false);
 			}
 		i++;
@@ -29,9 +30,36 @@ bool	is_valid_line(char *line)
 	return (true);
 }
 
-bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
+bool	check_num_elemets(t_solong *so)
+{
+	if (so->map->num_exits != 1 || so->map->num_collects < 1)
+	{
+		ft_putendl_fd("Error: Invalid number of collectibles or exits.", 2);
+		return (false);
+	}
+	
+	return (true);
+}
+void	free_map_from_index(t_solong *so, size_t k)
 {
 	size_t	i;
+
+	if (so->map->arr)
+	{
+		i = 0;
+		while (i < k)
+		{
+			if (so->map->arr[i] != NULL)
+				free(so->map->arr[i]);
+			i++;
+		}
+		free(so->map->arr);
+	}
+}
+
+
+bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
+{
 	size_t	j;
 	size_t	len;
 
@@ -46,46 +74,70 @@ bool	parse_line(t_solong *so, char *line, size_t k, t_pos *playerpos)
 	{
 		if (line[j] == '1')
 			so->map->arr[k][j] = 1;
-		else if (line[j] == '0' || line[j] == 'C' || line[j] == 'P' ||  line[j] == 'E')
+		else if (line[j] == 'P')
 		{
-			if (line[j] == 'P')
-			{
-				playerpos->x = (double)(j * TILESIZE);
-				playerpos->y = (double)(k * TILESIZE);
-				so->player.render_pos.x = playerpos->x;
-				so->player.render_pos.y = playerpos->y;
-				printf("parse line player pos x: %f, y: %f\n", so->player.pos.x, so->player.pos.y);
-			}
-			else if (line[j] == 'C')
-			{
-				so->map->num_collects++;
-				so->map->arr[k][j] = M_COLLECTIBLE;
-			}
-			else if (line[j] == 'E')
-			{
-				/* store exit as tile coordinates (not pixels). Other code
-				   multiplies by TILESIZE when rendering */
-				so->map->exit_pos.x = (double)j;
-				so->map->exit_pos.y = (double)k;
-				so->map->arr[k][j] = M_EXIT;
-			}
-			else
-				so->map->arr[k][j] = M_SPACE;
+			playerpos->x = (double)(j * TILESIZE);
+			playerpos->y = (double)(k * TILESIZE);
+			so->player.render_pos.x = playerpos->x;
+			so->player.render_pos.y = playerpos->y;
+			so->map->arr[k][j] = M_PLAYER;
 		}
-		else 
+		else if (line[j] == 'C')
 		{
-			return (false);
+			so->map->num_collects++;
+			so->map->arr[k][j] = M_COLLECTIBLE;
 		}
+		else if (line[j] == 'E')
+		{
+			so->map->exit_pos.x = (double)j;
+			so->map->exit_pos.y = (double)k;
+			so->map->arr[k][j] = M_EXIT;
+			so->map->num_exits++;
+		}
+		else
+			so->map->arr[k][j] = M_SPACE;
 		j++;
 	}
-	i = 0;
-	while (i < len)
-	{
-		printf("%i", so->map->arr[k][i]);
-		i++;
-	}
-	printf("\n");
 	return (true);
+}
+
+ssize_t	check_lines_lenght(int32_t fd, t_solong *so)
+{
+	char	*line;
+	size_t	last_len;
+	ssize_t	lines;
+	bool	same;
+	size_t	len;
+
+	lines = -1;
+	same = true;
+	line = get_next_line(fd);
+	if (!line)
+		return (lines);
+	so->map->width = ft_strlen(line);
+	if (line[so->map->width - 1] == '\n')
+		so->map->width--;
+	lines = 1;
+	while (1)
+	{
+		last_len = ft_strlen(line);
+		free(line);
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		len = ft_strlen(line);
+		if (line[len - 1] != '\n')
+		{
+			ft_putendl_fd("Error: Map need NL at last line.", 2);
+			return (-1);
+		}
+		if (len != last_len)
+			same = false;
+		lines++;
+	}
+	if (!same)
+		return (-1);
+	return (lines);
 }
 
 bool	read_file(t_solong *so, char *file)
@@ -93,45 +145,50 @@ bool	read_file(t_solong *so, char *file)
 	int32_t	fd;
 	char	*line;
 	size_t	k;
-	size_t	lines;
+	ssize_t	lines;
 
-	lines = 0;
 	k = 0;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		//return (free_all(so));
-		return (1);
-	while ((line = get_next_line(fd)))
-	{
-		lines++;
-		free(line);
-	}
+		return (free_all(so));
+	lines = check_lines_lenght(fd, so);
 	close(fd);
-	//so->map->original_num_lines = lines;
+	if (lines < 1)
+	{
+		ft_putendl_fd("Error: Invalid map. Inconsistent line lengths.", 2);
+		return (false);
+	}
 	so->map->arr = malloc(sizeof(int32_t *) * lines);
+	if (!so->map->arr)
+	{
+		free(so->map->arr);
+		return (false);
+	}
 	fd = open(file, O_RDONLY);
 	if (fd < 0 || !so->map->arr)
-		//return (free_all(so));
-		return (1);
+	{
+		free_map(so->map, so->mlx);
+		return (false);
+	}
 	while ((line = get_next_line(fd)))
 	{
-		so->map->width = ft_strlen(line);
 		if (!is_valid_line(line) || !parse_line(so, line, k, &so->player.pos))
 		{
 			free(line);
 			close(fd);
-			//return (free_all(so));
-			return (1);
+			free_map_from_index(so, k);
+			return (false);
 		}
 		k++;
 		free(line);
 	}
-	close(fd);
+	if (!check_num_elemets(so))
+	{
+		free_map_from_index(so, k + 1);
+		return (false);
+	}
 	so->map->height = lines;
-	printf("Map dimensions: height[%zu] weight[%zu]\n", so->map->height, so->map->width);
-	printf("\n");
-	//parse_array(so->map->arr, so->map->weight, so->map->height);
-	
+	close(fd);
 	return (true);
 }
 

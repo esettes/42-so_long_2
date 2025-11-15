@@ -21,7 +21,7 @@ void	copy_to_line(t_read *r, t_out *o, size_t n, size_t sel)
 			return ;
 		o->size = o->size + n + 1;
 	}
-	ft_memcpy(o->line + o->len, r->raw + r->curr, n);
+	f_memcpy(o->line + o->len, r->raw + r->curr, n);
 	o->len = o->len + n;
 	o->line[o->len] = '\0';
 	if (sel == 1)
@@ -36,7 +36,7 @@ size_t	check_raw_space(t_read *r, t_out *o)
 
 	if (r->curr > 0 && (r->end + BUFFER_SIZE) > BUFFER_SIZE)
 	{
-		ft_memmove(r->raw, r->raw + r->curr, r->end - r->curr);
+		f_memmove(r->raw, r->raw + r->curr, r->end - r->curr);
 		r->end = r->end - r->curr;
 		r->curr = 0;
 	}
@@ -50,14 +50,13 @@ size_t	check_raw_space(t_read *r, t_out *o)
 				return (0);
 			o->size = o->size + r->end + 1;
 		}
-		ft_memcpy(o->line + o->len, r->raw, r->end);
+		f_memcpy(o->line + o->len, r->raw, r->end);
 		o->len = o->len + n;
 		o->line[o->len + n] = '\0';
 		r->end = 0;
 	}
 	return (1);
 }
-
 
 ssize_t	check_read(t_read *r, t_out *o, int fd)
 {

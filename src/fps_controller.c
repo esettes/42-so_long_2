@@ -12,18 +12,6 @@
 
 #include "so_long.h"
 
-bool	detect_wall(t_solong *so, double x, double y)
-{
-	if (so->map->arr[(int)y / TILESIZE][(int)x / TILESIZE] == 1)
-	{
-		// if (so->map->arr[(int)(y - TILESIZE) / TILESIZE][(int)(x - TILESIZE) / TILESIZE] == 0)
-		// 	return (true);
-		return (true);
-	}
-	
-	return (false);
-}
-
 static void soft_follow_axis(double *value, double target, double max_step)
 {
     double delta;
@@ -62,12 +50,9 @@ void	compute_twist_and_lock(t_character *p, t_solong *so)
 	get_tile_and_center(p->pos, &tile, &center);
 	if (is_centered(so, p->pos))
 	{
-		printf("Centered at tile (%d,%d)\n", tile.x, tile.y);
 		if (p->wish_dir != DIR_NONE && can_move_dir_from_tile(so, tile, p->wish_dir))
 			p->dir = p->wish_dir;
 	}
-	
-	// if current dir is blocked, stop and snap to center
 	if (p->dir != DIR_NONE)
 	{
 		dir_to_vec(p->dir, &step.x, &step.y);
@@ -75,7 +60,7 @@ void	compute_twist_and_lock(t_character *p, t_solong *so)
 		ahead.y = tile.y + step.y;
 		if (!is_walkable(so->map, ahead.x, ahead.y))
 		{
-			p->pos.x = center.x - 32;
+			p->pos.x = center.x - (TILESIZE / 2);
 			p->pos.y = center.y;
 			p->dir = DIR_NONE;
 		}
@@ -96,9 +81,12 @@ void	go_ahead(t_character *p, t_solong *so, double dt)
 	
 
 	compute_twist_and_lock(p, so);
+	step.x = 0;
+	step.y = 0;
+	tile.x = 0;
+	tile.y = 0;
 	dir_to_vec(p->dir, &step.x, &step.y);
 	get_tile_and_center(p->pos, &tile, &center_pos);
-	// Blocked ahead? Snap to center and stop.
 	ahead_t.x = tile.x + step.x;
 	ahead_t.y = tile.y + step.y;
 	if (!is_walkable(so->map, ahead_t.x, ahead_t.y))
@@ -111,7 +99,6 @@ void	go_ahead(t_character *p, t_solong *so, double dt)
 	next_center.x = (ahead_t.x + 0.5) * (double)TILESIZE;
 	next_center.y = (ahead_t.y + 0.5) * (double)TILESIZE;
 	step_px = p->speed_px_s * dt;
-	//distance to the next center along the moving axis
 	if (step.x != 0)
 	{
 		p->pos.y = center_pos.y;
@@ -122,7 +109,7 @@ void	go_ahead(t_character *p, t_solong *so, double dt)
 	}
 	else if (step.y != 0)
 	{
-		p->pos.x = center_pos.x - 32;
+		p->pos.x = center_pos.x - (TILESIZE / 2);
 		dist = next_center.y - p->pos.y;
 		move = ft_clampd(step_px, 0, fabs(dist)) * (step.y);
 		p->pos.y += move;
@@ -135,58 +122,22 @@ void	go_ahead(t_character *p, t_solong *so, double dt)
 
 }
 
-void	animation_hook(mlx_image_t **sprites, t_character *npc, long now, int32_t num_sprites)
+void	animation_hook(mlx_image_t **sprites, t_character *npc, long elapsed, int32_t num_sprites)
 {
-	// long		elapsed_time;
-	// long		target_frame_dur;
+	long		target_frame_dur;
 
-	// elapsed_time = now - so->last_ms;
-	// target_frame_dur = 100 / TARGET_FPS;
-	// if (elapsed_time >= target_frame_dur)
-	// {
-	// 	so->last_ms += target_frame_dur;
-	 (void)sprites;
-	//physics_update(so, now);
-	
-	if (now - npc->last_anim_time >= ANIM_FRAME_INTERVAL)
+	target_frame_dur = 1000 / TARGET_FPS;
+	elapsed /= 2.00001;
+	(void)sprites;
+	if (elapsed >= target_frame_dur)
 	{
 		npc->curr_frame = (npc->curr_frame + 1) % num_sprites;
-		npc->last_anim_time += ANIM_FRAME_INTERVAL;
+		npc->last_anim_time += target_frame_dur;
 		
 		sprites[npc->curr_frame]->instances[0].enabled = true;
 		sprites[(npc->curr_frame + num_sprites - 1) % num_sprites]->instances[0].enabled = false;
 		sprites[npc->curr_frame]->instances[0].x = npc->render_pos.x;
-		sprites[npc->curr_frame]->instances[0].y = npc->render_pos.y - 32;
-		
-	}
-	//}
-}
-
-void	fps_controller(void *param)
-{
-	t_solong	*so;
-	long		curr_time;
-	long		elapsed_time;
-	long		target_frame_dur;
-	char		*fps;
-
-	so = (t_solong *)param;
-	curr_time = get_time_ms();
-	elapsed_time = curr_time - so->last_ms;
-	target_frame_dur = 1000 / TARGET_FPS;
-	fps = ft_itoa(so->fps);
-	if (elapsed_time >= target_frame_dur)
-	{
-		so->last_ms += target_frame_dur;
-		so->fps++;
-		if (curr_time - so->last_fps_update >= 1000)
-		{
-			fps = ft_itoa(so->fps);
-			mlx_put_string(so->mlx, fps, 100, 100);
-			free(fps);
-			so->fps = 0;
-			so->last_fps_update += target_frame_dur;
-		}
+		sprites[npc->curr_frame]->instances[0].y = npc->render_pos.y - (TILESIZE / 2);
 	}
 }
 
@@ -204,7 +155,6 @@ void	unable_sprites(mlx_image_t **sprites, int num)
 
 void	set_current_anim(t_solong *so, t_character *p, mlx_image_t **imgs, int num)
 {
-	// imgs[0]->instances[0].enabled = true;
 	(void)so;
 	if (p->curr_imgs == imgs)
 		return ;
@@ -214,9 +164,6 @@ void	set_current_anim(t_solong *so, t_character *p, mlx_image_t **imgs, int num)
 	p->curr_num_frames = NUM_PLAYER_SPRITES;
 	p->last_anim_time = get_time_ms();
 	p->curr_frame = 0;
-	render_interpolated(so,  p->curr_imgs[0]);
-	render_interpolated(so,  p->curr_imgs[1]);
-	render_interpolated(so,  p->curr_imgs[2]);
 }
 
 void	fps_hook(void *param)
@@ -227,9 +174,10 @@ void	fps_hook(void *param)
 	long		target_frame_dur;
 	double		dt;
 
+	
 	so = (t_solong *)param;
+	elapsed_time = so->mlx->delta_time * 1000;
 	curr_time = get_time_ms();	
-	elapsed_time = curr_time - so->last_ms;
 	target_frame_dur = 1000 / TARGET_FPS;
 	dt = (curr_time - so->last_update_ms) / 1000.0;
 	if (dt > 0.05)
@@ -240,12 +188,14 @@ void	fps_hook(void *param)
 		set_current_anim(so, &so->player, so->player.up.imgs, so->player.up.num_frames);
 		so->player.velocity.y = -20.0;
 		so->player.dir = DIR_UP;
+		so->movements_count++;
 	}
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_DOWN))
 	{
 		set_current_anim(so, &so->player, so->player.down.imgs, so->player.down.num_frames);
 		so->player.velocity.y = 20.0;
 		so->player.dir = DIR_DOWN;
+		so->movements_count++;
 	}
 	
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_LEFT))
@@ -253,12 +203,14 @@ void	fps_hook(void *param)
 		set_current_anim(so, &so->player, so->player.left.imgs, so->player.left.num_frames);
 		so->player.velocity.x = -20.0;
 		so->player.dir = DIR_LEFT;
+		so->movements_count++;
 	}
 	else if (mlx_is_key_down(so->mlx, MLX_KEY_RIGHT))
 	{
 		set_current_anim(so, &so->player, so->player.right.imgs, so->player.right.num_frames);
 		so->player.velocity.x = 20.0;
 		so->player.dir = DIR_RIGHT;
+		so->movements_count++;
 	}
 	else
     {
@@ -266,13 +218,14 @@ void	fps_hook(void *param)
 		so->player.velocity.x = 0.0;
 		so->player.velocity.y = 0.0;
 	}
+	
 	go_ahead(&so->player, so, dt);
 	if (elapsed_time >= target_frame_dur)
 	{
+		print_movements(so);
 		so->last_ms += target_frame_dur;
-		print_player_pos(so);
 		update_render_pos(&so->player, FOLLOW_SPEED_PX_S, dt);
-		animation_hook(so->player.curr_imgs, &so->player, curr_time, so->player.curr_num_frames);
+		animation_hook(so->player.curr_imgs, &so->player, elapsed_time, so->player.curr_num_frames);
 		get_collectible(so);
 		if (can_exit(so))
 			mlx_close_window(so->mlx);

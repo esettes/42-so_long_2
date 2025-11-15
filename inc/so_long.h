@@ -31,8 +31,8 @@ typedef	struct s_pos
 
 typedef	struct s_cell
 {
-	int32_t	x;	// w
-	int32_t	y;	// h
+	int32_t	x;
+	int32_t	y;
 }	t_cell;
 
 typedef struct anim
@@ -82,6 +82,9 @@ typedef struct s_collectible
 {
 	t_pos		pos;
 	t_anim		anim;
+	mlx_image_t	*img;
+	int32_t		instance_id;
+	bool		collected;
 }	t_collectible;
 
 
@@ -89,13 +92,16 @@ typedef	struct s_map
 {
 	char			**raw;
 	int32_t			**arr;
+	bool			**visited;
 	uint16_t		**collision_map;
 	size_t			height;
 	size_t			width;
 	t_collectible	*collects;
 	uint16_t		num_collects;
+	uint16_t		original_num_collects;
 	t_pos			exit_pos;
 	t_anim			exit;
+	uint16_t		num_exits;
 }	t_map;
 
 
@@ -113,41 +119,23 @@ typedef	struct s_solong
 	t_character		*enemies;
 	long			last_ms;
 	double			last_update_ms;
-	int				fps;
-	int				last_fps_update;
-	long			accum_ms;
-	mlx_image_t		*hud_db;
-	mlx_image_t		*hud_text_img;
-	mlx_image_t 	*hud_foreground;
-	double			center_epsilon_px; // 120 fps
-	
-
+	double			center_epsilon_px;
+	bool			is_running;
+	uint16_t		movements_count;
+	mlx_image_t		*movements_img;
 }	t_solong;
 
 bool	read_file(t_solong *so, char *file);
 bool	init_solong(t_solong *so, char *file);
 bool init_player(t_solong *so, t_character *p);
 
-void	parse_array(int32_t **map, size_t w, size_t h);
-bool	resize_pixels(xpm_t *xpm, uint32_t new_w, uint32_t new_h);
-///////////////////// Debug
-
-void	print_player_pos(t_solong *so);
-
 long	get_time_ms(void);
 void	fps_hook(void *param);
 
 void	unable_sprites(mlx_image_t **sprites, int num);
 
-///////////////////// Physics
-void	physics_update(t_solong *so, long now);
-
-void	render_interpolated(t_solong *so, mlx_image_t *img);
-void	fps_controller(void *param);
 void	print_map(t_map *map, t_solong *so);
 
-// void	init_collision_flags(t_solong *so);
-// void	init_height_map(t_solong *so);
 bool	init_emenies(t_solong *so);
 bool	init_player_anims(t_solong *so);
 ///////////////////// Animations initialization
@@ -157,7 +145,7 @@ bool	init_enemy_right(t_character *e, mlx_t *mlx, char *one, char *two);
 bool	init_enemy_left(t_character *e, mlx_t *mlx, char *one, char *two);
 
 bool	free_all(t_solong *so);
-
+void	print_movements(t_solong *so);
 
 int32_t	is_inside_map(const t_map *m, int32_t tile_x, int32_t tile_y);
 int32_t	is_wall(const t_map *m, int32_t tile_x, int32_t tile_y);
@@ -176,4 +164,9 @@ void	get_collectible(t_solong *so);
 bool	can_exit(t_solong *so);
 void	print_exit(t_solong *so);
 bool	init_exit(t_solong *so);
+bool	is_valid_extension(const char *file);
+void	free_map(t_map *map, mlx_t *mlx);
+bool	check_map_limits(t_solong *so);
+bool	is_map_playable(t_map *map, t_character *p);
+void	free_visited(bool **visited, size_t height);
 #endif

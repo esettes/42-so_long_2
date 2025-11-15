@@ -24,7 +24,7 @@ void	init_output(t_out *o)
 	o->size = 1;
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*f_memmove(void *dest, const void *src, size_t n)
 {
 	const unsigned char	*s = (const unsigned char *)src;
 	unsigned char		*d;
@@ -49,7 +49,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-void	*ft_memcpy(void *dest, const void *src, size_t bytes)
+void	*f_memcpy(void *dest, const void *src, size_t bytes)
 {
 	size_t				i;
 	const unsigned char	*s = (const unsigned char *)src;
@@ -87,7 +87,7 @@ void	*ft_realloc(void *old_ptr, size_t oldsize, size_t newsize)
 	else
 		cpy = newsize;
 	if (cpy > 0)
-		ft_memcpy(new_ptr, old_ptr, cpy);
+		f_memcpy(new_ptr, old_ptr, cpy);
 	free(old_ptr);
 	return (new_ptr);
 }
