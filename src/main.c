@@ -101,7 +101,6 @@ int32_t main(int32_t argc, char **argv)
 		ft_putendl_fd("Error: Can't init player struct.", 2);
 		return (free_all(&solong));
 	}
-	solong.player.last_anim_time = now;
 	spawn_collectibles(&solong);
 	mlx_loop_hook(solong.mlx, fps_hook, &solong);
 	mlx_loop(solong.mlx);

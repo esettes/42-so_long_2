@@ -50,12 +50,13 @@ typedef	struct s_character
 {
 	t_pos		pos;
 	t_pos		render_pos;
+	t_cell		last_pos;
 	t_anim		right;
 	t_anim		left;
 	t_anim		up;
-	t_anim		idle;
 	t_anim		down;
-	long		last_anim_time;
+	double		last_anim_time;
+	double		accum_sec;
 	long		curr_frame;
 	t_vec2		velocity;
 	t_vec2		hitbox;

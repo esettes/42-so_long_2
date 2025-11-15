@@ -13,10 +13,11 @@
 #ifndef CONFIG_H
 # define CONFIG_H
 
-#define TILESIZE			32
+#define TILESIZE			64
 #define TARGET_FPS			120
-#define ANIM_FRAME_INTERVAL 60	// ms
+#define ANIM_FRAME_INTERVAL 80.0	// ms
 #define FOLLOW_SPEED_PX_S	1000.0
+#define PX_PER_SECONDS		500.0
 
 #define PHYS_DT_MS	8          // 125 Hz
 #define MAX_ACC_MS	250
