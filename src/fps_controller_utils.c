@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fps_controller_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rstancu <rstancu@student.42.fr>            #+#  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-11-15 12:50:16 by rstancu           #+#    #+#             */
-/*   Updated: 2025-11-15 12:50:16 by rstancu          ###   ########.fr       */
+/*   Created: 2025/11/15 12:50:16 by rstancu           #+#    #+#             */
+/*   Updated: 2025/11/15 15:58:42 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@ void	catch_esc(t_solong *so)
 {
 	if (mlx_is_key_down(so->mlx, MLX_KEY_ESCAPE))
 	{
-		free_all(so);
+		//free_all(so);
 		mlx_close_window(so->mlx);
-		return ;
+		//return ;
 	}
 }

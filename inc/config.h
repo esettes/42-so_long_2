@@ -6,18 +6,18 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 17:29:38 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/15 11:41:03 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/15 15:59:43 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_H
 # define CONFIG_H
 
-#define TILESIZE			64
+#define TILESIZE			24
 #define TARGET_FPS			120
 #define ANIM_FRAME_INTERVAL 80.0	// ms
 #define FOLLOW_SPEED_PX_S	1000.0
-#define PX_PER_SECONDS		500.0
+#define PX_PER_SECONDS		200.0
 
 #define PHYS_DT_MS	8          // 125 Hz
 #define MAX_ACC_MS	250

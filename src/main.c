@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 13:23:45 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/13 11:31:57 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/15 16:06:23 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,18 @@ bool	init_wall(t_solong *so)
 
 bool	init_background(t_solong *so)
 {
+	mlx_texture_t *game_icon;
+
+	game_icon = mlx_load_png(PLAYER_RIGHT_2);
+	if (!game_icon)
+	{
+		mlx_close_window(so->mlx);
+		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
+		return (free_all(so));
+	}
+	mlx_set_icon(so->mlx, game_icon);
+	if (game_icon)
+		mlx_delete_texture(game_icon);
 	so->background = mlx_new_image(so->mlx,
 		so->map->width * TILESIZE, so->map->height * TILESIZE);
 	if (!so->background)
@@ -83,12 +95,21 @@ bool	init_background(t_solong *so)
 	return (true);
 }
 
-
+bool	init_mlx(t_solong *so)
+{
+	so->mlx = mlx_init(so->map->width * TILESIZE,
+		so->map->height * TILESIZE, "Pacman!", true);
+	if (!so->mlx)
+	{
+		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
+		return (free_all(so));
+	}
+	return (true);
+}
 
 int32_t main(int32_t argc, char **argv)
 {
 	t_solong		solong;
-	mlx_texture_t *game_icon;
 
 	if (argc != 2)
 	{
@@ -98,19 +119,10 @@ int32_t main(int32_t argc, char **argv)
 	solong.is_running = false;
 	if (!init_solong(&solong, argv[1]))
 		return (free_all(&solong));
-	solong.mlx = mlx_init(solong.map->width * TILESIZE,
-		solong.map->height * TILESIZE, "Pacman!", true);
-	if (!solong.mlx)
-	{
-		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
-		return (free_all(&solong));
-	}
-	game_icon = mlx_load_png(PLAYER_RIGHT_2);
+	if (!init_mlx(&solong))
+		return (1);
 	if (!init_background(&solong))
 		return (free_all(&solong));
-	mlx_set_icon(solong.mlx, game_icon);
-	if (game_icon)
-		mlx_delete_texture(game_icon);
 	print_map(solong.map, &solong);
 	if (!init_player(&solong, &solong.player))
 	{
