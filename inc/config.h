@@ -41,16 +41,6 @@ typedef enum e_dir
 	DIR_DOWN
 }	t_dir;
 
-typedef uint16_t t_tile_flags;
-
-enum e_tile_flags{
-    TF_EMPTY          = 0u,
-    TF_PLATFORM_TOP   = 1u << 0,  // one-way: blocks only when falling from above
-    TF_LADDER         = 1u << 1,  // ladder cell
-    TF_LADDER_DOWN	  = 1u << 2,  // ladder starts here (no ladder above)
-    TF_LADDER_UP	  = 1u << 3,  // ladder ends here (no ladder below)
-    TF_SOLID_FULL     = 1u << 4   // optional: full solid block (walls)
-};
 
 #ifndef ASSET_DIR
     #define ASSET_DIR "../tiles"

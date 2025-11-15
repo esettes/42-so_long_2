@@ -12,7 +12,6 @@
 
 #include "so_long.h"
 
-
 void	print_exit(t_solong *so)
 {
 	if (!init_exit(so))
@@ -20,7 +19,8 @@ void	print_exit(t_solong *so)
 		ft_putendl_fd("Error: Can't init exit image.", 2);
 		return ;
 	}
-	if (!mlx_image_to_window(so->mlx, so->map->exit.imgs[0], so->map->exit_pos.x * TILESIZE, so->map->exit_pos.y * TILESIZE))
+	if (!mlx_image_to_window(so->mlx, so->map->exit.imgs[0],
+		so->map->exit_pos.x * TILESIZE, so->map->exit_pos.y * TILESIZE))
 	{
 		return ;
 	}

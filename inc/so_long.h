@@ -51,6 +51,7 @@ typedef	struct s_character
 	t_pos		pos;
 	t_pos		render_pos;
 	t_cell		last_pos;
+	double		dt;
 	t_anim		right;
 	t_anim		left;
 	t_anim		up;
