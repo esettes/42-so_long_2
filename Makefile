@@ -21,15 +21,21 @@ SRCNAMES	= main.c \
 			read_file.c \
 			parse.c \
 			free.c \
+			free_items.c \
 			fps_controller.c \
+			fps_controller_utils.c \
+			fps_render_pos.c \
 			print_map.c\
 			init_anim_player.c \
+			init_anim_player_sprites.c \
 			init_enemies.c \
+			init_enemies_sprites.c \
 			init_anim_enemy.c \
 			init_so_long.c \
 			init_player.c \
 			init_collectibles.c \
 			movements_helpers.c \
+			movements_helpers_utils.c \
 			epsilon.c \
 			collectibles_spawn.c \
 			player_utils.c \
@@ -52,7 +58,7 @@ LDLIBS += -lft -lgnl -lm -pthread
 HEADERS	= -I include -I ./inc/libft/inc/ -I ./inc/gnl/inc/ -I ./inc/  -I ./inc/MLX42/include/MLX42/
 LIBX42_FLAGS	=	-I include -ldl -lglfw
 
-CFLAGS +=   -g3  -Wall -Wextra -Werror -fno-omit-frame-pointer -fsanitize=leak
+CFLAGS +=   -g3  -Wall -Wextra -Werror -fno-omit-frame-pointer #-fsanitize=leak
 
 PRINT ?= 0
 CFLAGS += -DPRINT=$(PRINT)

@@ -12,7 +12,7 @@
 
 #include "so_long.h"
 
-bool	init_map(t_solong *so, char *file)
+static bool	init_map(t_solong *so, char *file)
 {
 	so->map = malloc(sizeof(t_map));
 	if (!so->map)
@@ -28,20 +28,8 @@ bool	init_map(t_solong *so, char *file)
 	return (true);
 }
 
-bool	init_solong(t_solong *so, char *file)
+static bool	init(t_solong *so, char *file)
 {
-	long now;
-
-	if (!is_valid_extension(file))
-	{
-		ft_putendl_fd("Error: Invalid file extension.", 2);
-		return (false);
-	}
-	now = get_time_ms();
-	so->last_ms = now;
-	so->last_update_ms = now;
-	so->num_enemies = 0;
-	so->movements_count = 0;
 	if (!init_map(so, file))
 		return (false);
 	if (!check_map_limits(so))
@@ -55,6 +43,23 @@ bool	init_solong(t_solong *so, char *file)
 		free_map(so->map, so->mlx);
 		return (false);
 	}
+	
+	return (true);
+}
+
+bool	init_solong(t_solong *so, char *file)
+{
+	if (!is_valid_extension(file))
+	{
+		ft_putendl_fd("Error: Invalid file extension.", 2);
+		return (false);
+	}
+	so->last_ms = 0;
+	so->last_update_ms = 0.0;
+	so->num_enemies = 0;
+	so->movements_count = 0;
+	if (!init(so, file))
+		return (false);
 	so->is_running = true;
 	return (true);
 }

@@ -20,7 +20,7 @@ void	print_exit(t_solong *so)
 		return ;
 	}
 	if (!mlx_image_to_window(so->mlx, so->map->exit.imgs[0],
-		so->map->exit_pos.x * TILESIZE, so->map->exit_pos.y * TILESIZE))
+			so->map->exit_pos.x * TILESIZE, so->map->exit_pos.y * TILESIZE))
 	{
 		return ;
 	}

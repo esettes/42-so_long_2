@@ -59,11 +59,9 @@ typedef	struct s_character
 	double		last_anim_time;
 	double		accum_sec;
 	long		curr_frame;
-	t_vec2		velocity;
 	t_vec2		hitbox;
 	mlx_image_t **curr_imgs;
 	uint16_t	curr_num_frames;
-	bool		looking_left;
 	t_dir		dir;
 	t_dir		wish_dir;
 	double		speed_px_s;
@@ -168,7 +166,25 @@ void	print_exit(t_solong *so);
 bool	init_exit(t_solong *so);
 bool	is_valid_extension(const char *file);
 void	free_map(t_map *map, mlx_t *mlx);
+void	free_visited(bool **visited, size_t height);
+void	free_collectibles(t_solong *so);
+void	free_exit(t_solong *so);
+void	free_player(t_solong *so);
+void	free_imgs(mlx_image_t **imgs, mlx_t *mlx, int num,
+	mlx_texture_t **text);
+void	free_character(t_character *character, mlx_t *mlx);
 bool	check_map_limits(t_solong *so);
 bool	is_map_playable(t_map *map, t_character *p);
 void	free_visited(bool **visited, size_t height);
+void	go_ahead(t_character *p, t_solong *so, double dt);
+void	update_render_pos(t_character *p, double follow_speed_px_s, double dt);
+bool	init_anim_down(t_character *p, mlx_t *mlx);
+bool	init_anim_enemy_red(t_character *e, mlx_t *mlx);
+bool	init_anim_enemy_blue(t_character *e, mlx_t *mlx);
+bool	init_anim_enemy_orange(t_character *e, mlx_t *mlx);
+bool	init_anim_enemy_pink(t_character *e, mlx_t *mlx);
+bool	init_anim_up(t_character *p, mlx_t *mlx);
+bool	init_anim_right(t_character *p, mlx_t *mlx);
+bool	init_anim_left(t_character *p, mlx_t *mlx);
+void	catch_esc(t_solong *so);
 #endif

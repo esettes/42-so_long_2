@@ -32,4 +32,5 @@ void	print_map(t_map *map, t_solong *so)
 		i++;
 	}
 	print_exit(so);
+	spawn_collectibles(so);
 }
