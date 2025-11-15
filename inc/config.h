@@ -6,14 +6,14 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 17:29:38 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/11 10:01:19 by settes           ###   ########.fr       */
+/*   Updated: 2025/11/15 11:41:03 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_H
 # define CONFIG_H
 
-#define TILESIZE			64
+#define TILESIZE			32
 #define TARGET_FPS			120
 #define ANIM_FRAME_INTERVAL 60	// ms
 #define FOLLOW_SPEED_PX_S	1000.0
