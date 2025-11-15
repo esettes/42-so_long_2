@@ -39,6 +39,12 @@ typedef struct s_int2
 	int32_t	y;
 }               t_int2;
 
+typedef struct s_uint16
+{
+	uint16_t	x;
+	uint16_t	y;
+}	t_uint16;
+
 int				ft_toupper(int c);
 int				ft_tolower(int c);
 int				ft_isprint(int c);

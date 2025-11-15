@@ -13,10 +13,11 @@
 #ifndef CONFIG_H
 # define CONFIG_H
 
-#define TILESIZE			32
+#define TILESIZE			64
 #define TARGET_FPS			120
-#define ANIM_FRAME_INTERVAL 60	// ms
+#define ANIM_FRAME_INTERVAL 80.0	// ms
 #define FOLLOW_SPEED_PX_S	1000.0
+#define PX_PER_SECONDS		500.0
 
 #define PHYS_DT_MS	8          // 125 Hz
 #define MAX_ACC_MS	250
@@ -40,16 +41,6 @@ typedef enum e_dir
 	DIR_DOWN
 }	t_dir;
 
-typedef uint16_t t_tile_flags;
-
-enum e_tile_flags{
-    TF_EMPTY          = 0u,
-    TF_PLATFORM_TOP   = 1u << 0,  // one-way: blocks only when falling from above
-    TF_LADDER         = 1u << 1,  // ladder cell
-    TF_LADDER_DOWN	  = 1u << 2,  // ladder starts here (no ladder above)
-    TF_LADDER_UP	  = 1u << 3,  // ladder ends here (no ladder below)
-    TF_SOLID_FULL     = 1u << 4   // optional: full solid block (walls)
-};
 
 #ifndef ASSET_DIR
     #define ASSET_DIR "../tiles"

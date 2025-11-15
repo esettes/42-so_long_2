@@ -10,33 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "so_long.h"
-
-
-int32_t	is_inside_map(const t_map *m, int32_t tile_x, int32_t tile_y)
-{
-	return (tile_x >= 0 && (size_t)tile_x < m->width && tile_y >= 0 && (size_t)tile_y < m->height);
-}
-
-int32_t	is_wall(const t_map *m, int32_t tile_x, int32_t tile_y)
-{
-	if (!is_inside_map(m, tile_x, tile_y))
-		return 1;
-	if (m->arr[tile_y][tile_x] == 1)
-		return (true);
-	return (false);
-}
-
-int32_t	is_walkable(t_map *m, int32_t tile_x, int32_t tile_y)
-{
-	int32_t	n;
-
-	if (!is_inside_map(m, tile_x, tile_y))
-		return 0;
-	n = m->arr[tile_y][tile_x];
-	return (n != 1);
-}
 
 /**
  * gets in wich tile is player positioned and gets the center of that tile
@@ -45,8 +19,8 @@ void	get_tile_and_center(t_pos pos, t_int2 *tilepos, t_pos *out)
 {
 	double	cx;
 	double	cy;
-	int32_t		tx;
-	int32_t		ty;
+	int32_t	tx;
+	int32_t	ty;
 
 	tx = (int32_t)ft_floor(((double)pos.x / (double)TILESIZE));
 	ty = (int32_t)ft_floor(((double)pos.y / (double)TILESIZE));
@@ -70,22 +44,13 @@ void	dir_to_vec(t_dir d, int32_t *dir_x, int32_t *dir_y)
 	vx = 0;
 	vy = 0;
 	if (d == DIR_LEFT)
-	{
 		vx = -1;
-		
-	}
 	else if (d == DIR_RIGHT)
-	{
 		vx =  1;
-	}
 	else if (d == DIR_UP)
-	{
 		vy = -1;
-	}
 	else if (d == DIR_DOWN)
-	{
 		vy =  1;
-	}
 	if (dir_x)
 		*dir_x = vx;
 	if (dir_y)

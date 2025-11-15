@@ -12,177 +12,38 @@
 
 #include "so_long.h"
 
+void	free_imgs(mlx_image_t **imgs, mlx_t *mlx, int num,
+	mlx_texture_t **text)
+{
+	uint16_t	i;
+
+	i = 0;
+	while (i < num)
+	{
+		if (imgs && imgs[i])
+		{
+			if (mlx)
+				mlx_delete_image(mlx, imgs[i]);
+			if (text && text[i])
+				mlx_delete_texture(text[i]);
+		}
+		i++;
+	}
+	if (imgs)
+		free(imgs);
+	if (text)
+		free(text);
+}
+
 void	free_character(t_character *character, mlx_t *mlx)
 {
-	uint16_t	i;
+	int32_t		num;
 
-	i = 0;
-	while (i < character->right.num_frames)
-	{
-		if (character->right.imgs && character->right.imgs[i])
-		{
-			if (mlx)
-			{
-				mlx_delete_image(mlx, character->right.imgs[i]);
-				if (character->right.text && character->right.text[i])
-					mlx_delete_texture(character->right.text[i]);
-			}
-		}
-		if (character->left.imgs && character->left.imgs[i])
-		{
-			if (mlx)
-			{
-				mlx_delete_image(mlx, character->left.imgs[i]);
-				if (character->left.text && character->left.text[i])
-					mlx_delete_texture(character->left.text[i]);
-			}
-		}	
-		if (character->up.imgs && character->up.imgs[i])
-		{
-			if (mlx)
-			{
-				mlx_delete_image(mlx, character->up.imgs[i]);
-				if (character->up.text && character->up.text[i])
-					mlx_delete_texture(character->up.text[i]);
-			}
-		}
-		if (character->down.imgs && character->down.imgs[i])
-		{
-			if (mlx)
-			{
-				mlx_delete_image(mlx, character->down.imgs[i]);
-				if (character->down.text && character->down.text[i])
-					mlx_delete_texture(character->down.text[i]);
-			}
-		}
-		i++;
-	}
-	if (character->right.imgs)
-		free(character->right.imgs);
-	if (character->left.imgs)
-		free(character->left.imgs);
-	if (character->up.imgs)
-		free(character->up.imgs);
-	if (character->down.imgs)
-		free(character->down.imgs);
-	if (character->right.text)
-		free(character->right.text);
-	if (character->left.text)
-		free(character->left.text);
-	if (character->up.text)
-		free(character->up.text);
-	if (character->down.text)
-		free(character->down.text);
-}
-
-void	free_enemies(t_solong *so)
-{
-	uint16_t	i;
-
-	if (!so->enemies)
-		return ;
-	i = 0;
-	while (i < so->num_enemies)
-	{
-		free_character(&so->enemies[i], so->mlx);
-		i++;
-	}
-	free(so->enemies);
-}
-
-void	free_player(t_solong *so)
-{
-	if (so->player.curr_imgs)
-		free_character(&so->player, so->mlx);
-}
-
-void	free_exit(t_solong *so)
-{
-	if (!so->is_running)
-		return ;
-	if (so->map->exit.imgs)
-	{
-		if (so->map->exit.imgs[0])
-		{
-			mlx_delete_image(so->mlx, so->map->exit.imgs[0]);
-		}
-		free(so->map->exit.imgs);
-	}
-	if (so->map->exit.text)
-	{
-		if (so->map->exit.text[0])
-		{
-			mlx_delete_texture(so->map->exit.text[0]);
-		}
-		free(so->map->exit.text);
-	}
-}
-
-void	free_collectibles(t_solong *so)
-{
-	uint16_t	i;
-
-	if (!so->map->collects)
-		return ;
-	i = 0;
-	while (i < so->map->original_num_collects)
-	{
-		if (so->map->collects[i].anim.imgs)
-		{
-			if (so->map->collects[i].anim.imgs[0])
-			{
-				mlx_delete_image(so->mlx, so->map->collects[i].anim.imgs[0]);
-			}
-			free(so->map->collects[i].anim.imgs);
-		}
-		if (so->map->collects[i].anim.text)
-		{
-			if (so->map->collects[i].anim.text[0])
-			{
-				mlx_delete_texture(so->map->collects[i].anim.text[0]);
-			}
-			free(so->map->collects[i].anim.text);
-		}
-		i++;
-	}
-	free(so->map->collects);
-}
-
-void	free_visited(bool **visited, size_t height)
-{
-	size_t	i;
-
-	if (!visited)
-		return ;
-	i = 0;
-	while (i < height)
-	{
-		if (visited[i])
-			free(visited[i]);
-		i++;
-	}
-	free(visited);
-}
-
-void	free_map(t_map *map, mlx_t *mlx)
-{
-	size_t	i;
-
-	(void)mlx;
-	if (!map)
-		return ;
-	if (map->arr)
-	{
-		i = 0;
-		while (i < map->height)
-		{
-			if (map->arr[i] != NULL)
-				free(map->arr[i]);
-			i++;
-		}
-		free(map->arr);
-	}
-	free(map);
+	num = NUM_PLAYER_SPRITES;
+	free_imgs(character->right.imgs, mlx, num, character->right.text);
+	free_imgs(character->left.imgs, mlx, num, character->left.text);
+	free_imgs(character->up.imgs, mlx, num, character->up.text);
+	free_imgs(character->down.imgs, mlx, num, character->down.text);
 }
 
 bool	free_all(t_solong *so)
