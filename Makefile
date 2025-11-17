@@ -54,7 +54,8 @@ OBJS	= $(addprefix $(OBJDIR), $(SRCNAMES:.c=.o))
 LIBFT = ./inc/libft/libft.a
 MLX42 = ./inc/MLX42/build/libmlx42.a
 GNL = ./inc/gnl/libgnl.a
- 
+MLXDIR = ./inc/MLX42/
+
 LDFLAGS += -L ./inc/libft -L ./inc/gnl
 LDLIBS += -lft -lgnl -lm -pthread
 HEADERS	= -I include -I ./inc/libft/inc/ -I ./inc/gnl/inc/ -I ./inc/  -I ./inc/MLX42/include/MLX42/
@@ -69,7 +70,7 @@ CC = cc
 
 MAKEFLAGS += --no-print-directory
 
-all: obj $(LIBFT) $(GNL) $(NAME)
+all: obj $(MLX42) $(LIBFT) $(GNL) $(NAME)
 
 $(NAME):  $(OBJS)
 	@$(CC) $(CFLAGS) $(LDFLAGS) $(HEADERS) -o $(NAME) $(OBJS) $(MLX42) $(LIBX42_FLAGS) $(LDLIBS)
@@ -85,6 +86,9 @@ $(LIBFT):
 
 $(GNL):
 	@$(MAKE) -C $(dir $(GNL))
+
+$(MLX42):
+	@cmake $(MLXDIR) -B $(MLXDIR)/build && make -C $(MLXDIR)/build -j4
 
 obj:
 	@mkdir -p $(OBJDIR)

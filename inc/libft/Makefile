@@ -27,7 +27,6 @@ SRCNAMES =	ft_strlen.c \
 		ft_strlcpy.c \
 		ft_strlcat.c \
 		ft_atoi.c \
-		ft_atoint32.c \
 		ft_floor.c \
 		ft_calloc.c \
 		ft_strdup.c \

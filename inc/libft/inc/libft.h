@@ -13,31 +13,31 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdint.h>
-#include <limits.h>
-#include <stdbool.h>
-#include <sys/time.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdint.h>
+# include <limits.h>
+# include <stdbool.h>
+# include <sys/time.h>
 
 typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
-}       t_list;
+}	t_list;
 
 typedef struct s_vec2
 {
 	double	x;
 	double	y;
-}               t_vec2;
+}	t_vec2;
 
 typedef struct s_int2
 {
 	int32_t	x;
 	int32_t	y;
-}               t_int2;
+}	t_int2;
 
 typedef struct s_uint16
 {
@@ -100,7 +100,8 @@ void			ft_lstadd_back(t_list **lst, t_list *new);
 void			ft_lstdelone(t_list *lst, void (*del)(void*));
 void			ft_lstclear(t_list **lst, void (*del)(void*));
 void			ft_lstiter(t_list *lst, void (*f)(void *));
-t_list			*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+t_list			*ft_lstmap(t_list *lst, void *(*f)(void *),
+					void (*del)(void *));
 double			ft_clampd(double x, double lo, double hi);
 int32_t			ft_clampi(int32_t x, int32_t lo, int32_t hi);
 double			ft_lerp(double a, double b, double t);

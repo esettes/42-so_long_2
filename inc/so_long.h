@@ -10,26 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
-#include <math.h>
-#include <stdbool.h>
-#include <MLX42.h>
-#include <fcntl.h>
-#include <get_next_line.h>
-#include <libft.h>
-#include <config.h>
-#include <sys/time.h>
+# include <math.h>
+# include <stdbool.h>
+# include <MLX42.h>
+# include <fcntl.h>
+# include <get_next_line.h>
+# include <libft.h>
+# include <config.h>
+# include <sys/time.h>
 
-typedef	struct s_pos
+typedef struct s_pos
 {
 	double	x;
 	double	y;
 }	t_pos;
 
-typedef	struct s_cell
+typedef struct s_cell
 {
 	int32_t	x;
 	int32_t	y;
@@ -40,13 +39,13 @@ typedef struct anim
 	mlx_texture_t	**text;
 	mlx_image_t		**imgs;
 	uint16_t		num_frames;
-}               t_anim;
+}	t_anim;
 
 /**
  * @param coyote_ms float, remaining time of coyote jump
  * @param jumpbuf_ms float, remaining time of jump-buffer
  */
-typedef	struct s_character
+typedef struct s_character
 {
 	t_pos		pos;
 	t_pos		render_pos;
@@ -60,7 +59,7 @@ typedef	struct s_character
 	double		accum_sec;
 	long		curr_frame;
 	t_vec2		hitbox;
-	mlx_image_t **curr_imgs;
+	mlx_image_t	**curr_imgs;
 	uint16_t	curr_num_frames;
 	t_dir		dir;
 	t_dir		wish_dir;
@@ -68,7 +67,7 @@ typedef	struct s_character
 	uint16_t	num_characters;
 }	t_character;
 
-typedef	struct s_npc
+typedef struct s_npc
 {
 	t_pos		pos;		
 	t_anim		right;
@@ -77,7 +76,6 @@ typedef	struct s_npc
 	t_anim		idle;
 	t_anim		down;
 }	t_npc;
-
 
 typedef struct s_collectible
 {
@@ -88,8 +86,7 @@ typedef struct s_collectible
 	bool		collected;
 }	t_collectible;
 
-
-typedef	struct s_map
+typedef struct s_map
 {
 	char			**raw;
 	int32_t			**arr;
@@ -105,8 +102,7 @@ typedef	struct s_map
 	uint16_t		num_exits;
 }	t_map;
 
-
-typedef	struct s_solong
+typedef struct s_solong
 {
 	t_map			*map;
 	mlx_image_t		*background;
@@ -128,7 +124,7 @@ typedef	struct s_solong
 
 bool	read_file(t_solong *so, char *file);
 bool	init_solong(t_solong *so, char *file);
-bool init_player(t_solong *so, t_character *p);
+bool	init_player(t_solong *so, t_character *p);
 
 long	get_time_ms(void);
 void	fps_hook(void *param);
@@ -172,7 +168,7 @@ void	free_collectibles(t_solong *so);
 void	free_exit(t_solong *so);
 void	free_player(t_solong *so);
 void	free_imgs(mlx_image_t **imgs, mlx_t *mlx, int num,
-	mlx_texture_t **text);
+			mlx_texture_t **text);
 void	free_character(t_character *character, mlx_t *mlx);
 bool	check_map_limits(t_solong *so);
 bool	is_map_playable(t_map *map, t_character *p);
