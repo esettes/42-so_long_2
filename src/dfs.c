@@ -53,7 +53,7 @@ static bool	init_dfs_arr(t_map *map)
 	return (true);
 }
 
-static inline bool is_walkable_tile(int32_t tile)
+static inline bool	is_walkable_tile(int32_t tile)
 {
 	if (tile == 1)
 		return (false);

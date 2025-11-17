@@ -43,7 +43,6 @@ static bool	init(t_solong *so, char *file)
 		free_map(so->map, so->mlx);
 		return (false);
 	}
-	
 	return (true);
 }
 

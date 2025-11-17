@@ -38,4 +38,3 @@ bool	check_map_limits(t_solong *so)
 	}
 	return (true);
 }
-

@@ -48,6 +48,7 @@ bool	init_player(t_solong *so, t_character *p)
 	p->dir = DIR_NONE;
 	p->speed_px_s = PX_PER_SECONDS;
 	so->center_epsilon_px = compute_center_epsilon_px(p->speed_px_s);
+	p->num_characters = 0;
 	if (!init_player_anims(so))
 		return (false);
 	if (!put_first_sprites_to_win(p, so->mlx))

@@ -10,8 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "so_long.h"
+
+void	print_first_movement(t_solong *so)
+{
+	char	*num_str;
+
+	num_str = ft_itoa(so->movements_count);
+	if (!num_str)
+		return ;
+	so->movements_img = mlx_put_string(so->mlx, num_str, 10, 10);
+	free(num_str);
+}
 
 void	print_movements(t_solong *so)
 {

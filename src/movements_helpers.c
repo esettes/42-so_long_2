@@ -46,11 +46,11 @@ void	dir_to_vec(t_dir d, int32_t *dir_x, int32_t *dir_y)
 	if (d == DIR_LEFT)
 		vx = -1;
 	else if (d == DIR_RIGHT)
-		vx =  1;
+		vx = 1;
 	else if (d == DIR_UP)
 		vy = -1;
 	else if (d == DIR_DOWN)
-		vy =  1;
+		vy = 1;
 	if (dir_x)
 		*dir_x = vx;
 	if (dir_y)
@@ -68,23 +68,23 @@ int32_t	is_centered(const t_solong *so, t_pos pos)
 	get_tile_and_center(pos, NULL, &center_pos);
 	dir_x = pos.x - center_pos.x;
 	dir_y = pos.y - center_pos.y;
-	if (dir_x > -so->center_epsilon_px && dir_x < so->center_epsilon_px &&
-		dir_y > -so->center_epsilon_px && dir_y < so->center_epsilon_px)
+	if (dir_x > -so->center_epsilon_px && dir_x < so->center_epsilon_px
+		&& dir_y > -so->center_epsilon_px && dir_y < so->center_epsilon_px)
 		return (true);
 	return (false);
 }
 
 int32_t	can_move_dir_from_tile(const t_solong *so, t_int2 tilepos, t_dir d)
-{	
+{
 	int32_t	next_x;
 	int32_t	next_y;
-	int32_t dir_x;
-	int32_t dir_y;
+	int32_t	dir_x;
+	int32_t	dir_y;
 
 	dir_x = 0;
 	dir_y = 0;
-    dir_to_vec(d, &dir_x, &dir_y);
-    next_x = tilepos.x + dir_x;
-    next_y = tilepos.y + dir_y;
-    return (is_walkable(so->map, next_x, next_y));
+	dir_to_vec(d, &dir_x, &dir_y);
+	next_x = tilepos.x + dir_x;
+	next_y = tilepos.y + dir_y;
+	return (is_walkable(so->map, next_x, next_y));
 }

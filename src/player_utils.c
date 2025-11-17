@@ -22,12 +22,10 @@ void	get_collectible(t_solong *so)
 	while (i < so->map->original_num_collects)
 	{
 		if (((int32_t)so->map->collects[i].pos.x == player_tile.x
-			&& (int32_t)so->map->collects[i].pos.y == player_tile.y)
+				&& (int32_t)so->map->collects[i].pos.y == player_tile.y)
 			&& !so->map->collects[i].collected)
 		{
-
 			so->map->collects[i].anim.imgs[0]->instances[0].enabled = false;
-			
 			so->map->arr[player_tile.y][player_tile.x] = M_SPACE;
 			so->map->num_collects--;
 			so->map->collects[i].collected = true;

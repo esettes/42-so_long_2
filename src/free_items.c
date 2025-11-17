@@ -23,7 +23,7 @@ void	free_exit(t_solong *so)
 	if (!so->is_running)
 		return ;
 	free_imgs(so->map->exit.imgs, so->mlx,
-		so->map->exit.num_frames, so->map->exit.text);
+		1, so->map->exit.text);
 }
 
 void	free_collectibles(t_solong *so)

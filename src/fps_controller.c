@@ -56,22 +56,22 @@ void	anim(t_dir dir, t_solong *so, mlx_image_t **imgs, int num)
 
 void	catch_keys(t_solong *so, bool *updated)
 {
-	if (mlx_is_key_down(so->mlx, MLX_KEY_UP))
+	if (mlx_is_key_down(so->mlx, 265) || mlx_is_key_down(so->mlx, 87))
 	{
 		anim(DIR_UP, so, so->player.up.imgs, so->player.up.num_frames);
 		*updated = true;
 	}
-	else if (mlx_is_key_down(so->mlx, MLX_KEY_DOWN))
+	else if (mlx_is_key_down(so->mlx, 264) || mlx_is_key_down(so->mlx, 83))
 	{
 		anim(DIR_DOWN, so, so->player.down.imgs, so->player.down.num_frames);
 		*updated = true;
 	}
-	else if (mlx_is_key_down(so->mlx, MLX_KEY_LEFT))
+	else if (mlx_is_key_down(so->mlx, 263) || mlx_is_key_down(so->mlx, 65))
 	{
 		anim(DIR_LEFT, so, so->player.left.imgs, so->player.left.num_frames);
 		*updated = true;
 	}
-	else if (mlx_is_key_down(so->mlx, MLX_KEY_RIGHT))
+	else if (mlx_is_key_down(so->mlx, 262) || mlx_is_key_down(so->mlx, 68))
 	{
 		anim(DIR_RIGHT, so, so->player.right.imgs, so->player.right.num_frames);
 		*updated = true;

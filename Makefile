@@ -18,7 +18,9 @@ endif
 
 SRCDIR		= ./src/
 SRCNAMES	= main.c \
+			main_utils.c \
 			read_file.c \
+			read_file_helpers.c \
 			parse.c \
 			free.c \
 			free_items.c \

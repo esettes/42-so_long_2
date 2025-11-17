@@ -65,6 +65,7 @@ typedef	struct s_character
 	t_dir		dir;
 	t_dir		wish_dir;
 	double		speed_px_s;
+	uint16_t	num_characters;
 }	t_character;
 
 typedef	struct s_npc
@@ -187,4 +188,16 @@ bool	init_anim_up(t_character *p, mlx_t *mlx);
 bool	init_anim_right(t_character *p, mlx_t *mlx);
 bool	init_anim_left(t_character *p, mlx_t *mlx);
 void	catch_esc(t_solong *so);
+
+void	print_first_movement(t_solong *so);
+bool	is_valid_line(char *line);
+bool	check_num_elemets(t_solong *so);
+void	free_map_from_index(t_solong *so, size_t k);
+void	set_cell(t_solong *so, char *line, size_t k, size_t j);
+bool	parse_line(t_solong *so, char *line, size_t k);
+bool	init_wall(t_solong *so);
+bool	create_background(t_solong *so);
+bool	init_background(t_solong *so);
+bool	init_mlx(t_solong *so);
+
 #endif

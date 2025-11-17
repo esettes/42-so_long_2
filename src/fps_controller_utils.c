@@ -106,8 +106,6 @@ void	catch_esc(t_solong *so)
 {
 	if (mlx_is_key_down(so->mlx, MLX_KEY_ESCAPE))
 	{
-		//free_all(so);
 		mlx_close_window(so->mlx);
-		//return ;
 	}
 }

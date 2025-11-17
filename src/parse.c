@@ -22,7 +22,7 @@ bool	is_valid_extension(const char *file)
 {
 	size_t		len;
 	size_t		ext_len;
-	const char *ext = ".ber";
+	const char	*ext = ".ber";
 
 	if (!file)
 		return (false);
@@ -30,5 +30,6 @@ bool	is_valid_extension(const char *file)
 	ext_len = ft_strlen(ext);
 	if (len < ext_len)
 		return (false);
-	return (ft_strncmp((char *)file + len - ext_len, (char *)ext, ext_len) == 0);
+	return (ft_strncmp((char *)file + len - ext_len,
+			(char *)ext, ext_len) == 0);
 }
