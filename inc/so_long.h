@@ -77,6 +77,16 @@ typedef struct s_npc
 	t_anim		down;
 }	t_npc;
 
+typedef struct s_enemy
+{
+	t_character		common;
+	t_ghost_type	type;
+	t_ghost_mode	mode;
+	t_cell 			corner;
+	t_cell			target;
+
+}	t_enemy;
+
 typedef struct s_collectible
 {
 	t_pos		pos;
@@ -113,7 +123,7 @@ typedef struct s_solong
 	mlx_texture_t	*text_cell;
 	mlx_image_t		*cell_tile;
 	uint16_t		num_enemies;
-	t_character		*enemies;
+	t_enemy			*enemies;
 	long			last_ms;
 	double			last_update_ms;
 	double			center_epsilon_px;

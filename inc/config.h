@@ -41,6 +41,22 @@ typedef enum e_dir
 	DIR_DOWN
 }	t_dir;
 
+typedef enum e_ghost_type
+{
+    GHOST_BLINKY,    // red
+    GHOST_PINKY,     // pink
+    GHOST_INKY,      // cyan
+    GHOST_CLYDE      // orange
+}   t_ghost_type;
+
+typedef enum e_ghost_mode
+{
+    GHOST_MODE_SCATTER,
+    GHOST_MODE_CHASE,
+    GHOST_MODE_FRIGHTENED,
+    GHOST_MODE_EATEN
+}   t_ghost_mode;
+
 ///// PLAYER
 # define NUM_PLAYER_SPRITES	3
 # define PLAYER_UP_1 "./tiles/up_1.png"

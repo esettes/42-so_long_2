@@ -20,7 +20,8 @@ bool	is_valid_line(char *line)
 	while (line[i])
 	{
 		if (!(line[i] == '1' || line[i] == '0' || line[i] == 'P'
-				|| line[i] == 'C' || line[i] == 'E' || line[i] == '\n'))
+				|| line[i] == 'C' || line[i] == 'E' || line[i] == '\n'
+				|| line[i] == 'N'))
 		{
 			ft_putendl_fd("Error: Invalid character in map.", 2);
 			return (false);
@@ -82,6 +83,13 @@ void	set_cell(t_solong *so, char *line, size_t k, size_t j)
 		so->map->exit_pos.y = (double)k;
 		so->map->arr[k][j] = M_EXIT;
 		so->map->num_exits++;
+	}
+	else if (line[j] == 'N')
+	{
+		so->map->exit_pos.x = (double)j;
+		so->map->exit_pos.y = (double)k;
+		so->map->arr[k][j] = M_ENEMY;
+		so->num_enemies++;
 	}
 	else
 		so->map->arr[k][j] = M_SPACE;
