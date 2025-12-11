@@ -43,18 +43,18 @@ typedef enum e_dir
 
 typedef enum e_ghost_type
 {
-    GHOST_BLINKY,    // red
-    GHOST_PINKY,     // pink
-    GHOST_INKY,      // cyan
-    GHOST_CLYDE      // orange
+    GHOST_BLINKY,    // red, chaser
+    GHOST_PINKY,     // pink, ambusher
+    GHOST_INKY,      // cyan, unpredictable
+    GHOST_CLYDE      // orange, chase then scatter
 }   t_ghost_type;
 
 typedef enum e_ghost_mode
 {
-    GHOST_MODE_SCATTER,
-    GHOST_MODE_CHASE,
-    GHOST_MODE_FRIGHTENED,
-    GHOST_MODE_EATEN
+    GHOST_MODE_SCATTER,	// each ghost goes to its corner
+    GHOST_MODE_CHASE,	// each ghost targets the player
+    GHOST_MODE_FRIGHTENED,	// blue and vulnerable
+    GHOST_MODE_EATEN	// returning to the ghost house
 }   t_ghost_mode;
 
 ///// PLAYER

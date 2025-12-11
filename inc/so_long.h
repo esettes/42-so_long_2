@@ -79,12 +79,13 @@ typedef struct s_npc
 
 typedef struct s_enemy
 {
-	t_character		common;
+	t_character		common;	// position, direction, time, animations, ...
 	t_ghost_type	type;
 	t_ghost_mode	mode;
 	t_cell 			corner;
 	t_cell			target;
-
+	bool			is_elroy; // only for blinky, faster when few pellets remain
+	
 }	t_enemy;
 
 typedef struct s_collectible
