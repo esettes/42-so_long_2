@@ -66,6 +66,7 @@ void compute_inky_intermediate_tile(t_solong *so, t_int2 *out)
 
 /**
  * gets the first blinky enemy position
+ * red
  */
 t_enemy *get_first_blinky_position(t_solong *so)
 {
@@ -83,6 +84,9 @@ t_enemy *get_first_blinky_position(t_solong *so)
 	return (NULL);
 }
 
+/**
+ * blue
+ */
 void set_chase_target_inky(t_enemy *e, t_solong *so)
 {
 	t_enemy *blinky;
@@ -106,6 +110,7 @@ void set_chase_target_inky(t_enemy *e, t_solong *so)
 
 /**
  * clyde chases the player if farther than 8 tiles, else goes to corner
+ * orange
  */
 
 void set_chase_target_clyde(t_enemy *e, t_solong *so)
@@ -124,5 +129,30 @@ void set_chase_target_clyde(t_enemy *e, t_solong *so)
 	{
 		e->target.x = 0;
 		e->target.y = so->map->height - 1;
+	}
+}
+
+void	update_ghots_target(t_solong *so, t_enemy *e)
+{
+	if (e->mode == GHOST_MODE_FRIGHTENED)
+	{
+		e->target.x = e->common.pos.x;
+		e->target.y = e->common.pos.y;
+	}
+	if (e->mode == GHOST_MODE_SCATTER)
+	{
+		set_scatter_target(so, e);
+		return ;
+	}
+	if (e->mode == GHOST_MODE_CHASE)
+	{
+		if (e->type == GHOST_BLINKY)
+			set_chase_target_blinky(e, so);
+		else if (e->type == GHOST_PINKY)
+			compute_pinky_target(so, e);
+		else if (e->type == GHOST_INKY)
+			set_chase_target_inky(e, so);
+		else if (e->type == GHOST_CLYDE)
+			set_chase_target_clyde(e, so);
 	}
 }
