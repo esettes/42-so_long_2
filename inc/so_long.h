@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rstancu <rstancu@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 13:24:24 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/11 10:30:24 by settes           ###   ########.fr       */
+/*   Updated: 2026/01/16 15:33:13 by rstancu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,8 @@ bool	is_map_playable(t_map *map, t_character *p);
 void	free_visited(bool **visited, size_t height);
 void	go_ahead(t_character *p, t_solong *so, double dt);
 void	update_render_pos(t_character *p, double follow_speed_px_s, double dt);
+
+
 bool	init_anim_down(t_character *p, mlx_t *mlx);
 bool	init_anim_enemy_red(t_character *e, mlx_t *mlx);
 bool	init_anim_enemy_blue(t_character *e, mlx_t *mlx);
@@ -194,6 +196,7 @@ bool	init_anim_enemy_pink(t_character *e, mlx_t *mlx);
 bool	init_anim_up(t_character *p, mlx_t *mlx);
 bool	init_anim_right(t_character *p, mlx_t *mlx);
 bool	init_anim_left(t_character *p, mlx_t *mlx);
+
 void	catch_esc(t_solong *so);
 
 void	print_first_movement(t_solong *so);
@@ -207,4 +210,5 @@ bool	create_background(t_solong *so);
 bool	init_background(t_solong *so);
 bool	init_mlx(t_solong *so);
 
+void	update_ghost_target(t_solong *so, t_enemy *e);
 #endif

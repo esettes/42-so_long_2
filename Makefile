@@ -44,7 +44,8 @@ SRCNAMES	= main.c \
 			exit_utils.c \
 			map_mandatory.c \
 			dfs.c \
-			print_movements.c
+			print_movements.c \
+			enemy_target.c
 
 SRC			= $(addprefix $(SRCDIR), $(SRCNAMES))
 

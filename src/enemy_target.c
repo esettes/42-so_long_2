@@ -132,7 +132,7 @@ void set_chase_target_clyde(t_enemy *e, t_solong *so)
 	}
 }
 
-void	update_ghots_target(t_solong *so, t_enemy *e)
+void	update_ghost_target(t_solong *so, t_enemy *e)
 {
 	if (e->mode == GHOST_MODE_FRIGHTENED)
 	{

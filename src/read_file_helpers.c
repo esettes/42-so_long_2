@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_file_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rstancu <rstancu@student.42.fr>            #+#  +:+       +#+        */
+/*   By: rstancu <rstancu@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-11-17 13:31:29 by rstancu           #+#    #+#             */
-/*   Updated: 2025-11-17 13:31:29 by rstancu          ###   ########.fr       */
+/*   Created: 2025/11/17 13:31:29 by rstancu           #+#    #+#             */
+/*   Updated: 2026/01/16 15:45:34 by rstancu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,6 @@ void	set_cell(t_solong *so, char *line, size_t k, size_t j)
 	}
 	else if (line[j] == 'N')
 	{
-		so->map->exit_pos.x = (double)j;
-		so->map->exit_pos.y = (double)k;
 		so->map->arr[k][j] = M_ENEMY;
 		so->num_enemies++;
 	}

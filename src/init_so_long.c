@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_so_long.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rstancu <rstancu@student.42.fr>            #+#  +:+       +#+        */
+/*   By: rstancu <rstancu@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-11-11 10:02:14 by rstancu           #+#    #+#             */
-/*   Updated: 2025-11-11 10:02:14 by rstancu          ###   ########.fr       */
+/*   Created: 2025/11/11 10:02:14 by rstancu           #+#    #+#             */
+/*   Updated: 2026/01/16 15:55:09 by rstancu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static bool	init(t_solong *so, char *file)
 {
 	if (!init_map(so, file))
 		return (false);
+	
 	if (!check_map_limits(so))
 	{
 		free_map(so->map, so->mlx);
