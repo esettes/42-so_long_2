@@ -141,7 +141,7 @@ void	update_ghost_target(t_solong *so, t_enemy *e)
 	}
 	if (e->mode == GHOST_MODE_SCATTER)
 	{
-		set_scatter_target(so, e);
+		set_scatter_target(e, so);
 		return ;
 	}
 	if (e->mode == GHOST_MODE_CHASE)

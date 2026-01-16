@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rstancu <rstancu@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 11:27:50 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/11 13:32:15 by settes           ###   ########.fr       */
+/*   Updated: 2026/01/16 16:07:13 by rstancu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,20 @@ void	free_character(t_character *character, mlx_t *mlx)
 	free_imgs(character->down.imgs, mlx, num, character->down.text);
 }
 
+void free_enemies(t_solong *so)
+{
+	uint16_t	i;
+
+	i = 0;
+	while (i < so->num_enemies)
+	{
+		free_character(&so->enemies[i].common, so->mlx);
+		i++;
+	}
+	if (so->enemies)
+		free(so->enemies);
+}
+
 bool	free_all(t_solong *so)
 {
 	if (so->is_running)
@@ -57,6 +71,7 @@ bool	free_all(t_solong *so)
 			mlx_delete_texture(so->text_cell);
 		free_exit(so);
 		free_collectibles(so);
+		free_enemies(so);
 		if (so->background)
 			mlx_delete_image(so->mlx, so->background);
 		if (so->movements_img)

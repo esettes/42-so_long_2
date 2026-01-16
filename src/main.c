@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rstancu <rstancu@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 13:23:45 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/15 16:06:23 by settes           ###   ########.fr       */
+/*   Updated: 2026/01/16 16:03:39 by rstancu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ int32_t	main(int32_t argc, char **argv)
 	if (!init_player(&solong, &solong.player))
 	{
 		free_map(solong.map, solong.mlx);
+		return (false);
+	}
+	if (!init_enemies(&solong))
+	{
+		free_all(&solong);
 		return (false);
 	}
 	mlx_loop_hook(solong.mlx, fps_hook, &solong);

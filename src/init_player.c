@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   init_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rstancu <rstancu@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 09:49:21 by rstancu           #+#    #+#             */
-/*   Updated: 2025/11/11 13:39:40 by settes           ###   ########.fr       */
+/*   Updated: 2026/01/16 16:19:02 by rstancu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-static bool	put_imgs_to_win(mlx_t *mlx, mlx_image_t **imgs, t_pos pos)
+static bool	put_imgs_to_win(mlx_t *mlx, mlx_image_t **imgs, t_pos pos, int32_t num_sprites)
 {
 	uint16_t	i;
 
 	i = 0;
-	while (i < NUM_PLAYER_SPRITES)
+	while (i < num_sprites)
 	{
 		if (mlx_image_to_window(mlx, imgs[i], pos.x, pos.y) == -1)
 			return (false);
@@ -27,15 +27,15 @@ static bool	put_imgs_to_win(mlx_t *mlx, mlx_image_t **imgs, t_pos pos)
 	return (true);
 }
 
-static bool	put_first_sprites_to_win(t_character *p, mlx_t *mlx)
+bool	put_first_sprites_to_win(t_character *p, mlx_t *mlx, int32_t num_sprites)
 {
-	if (!put_imgs_to_win(mlx, p->up.imgs, p->render_pos))
+	if (!put_imgs_to_win(mlx, p->up.imgs, p->render_pos, num_sprites))
 		return (false);
-	if (!put_imgs_to_win(mlx, p->down.imgs, p->render_pos))
+	if (!put_imgs_to_win(mlx, p->down.imgs, p->render_pos, num_sprites))
 		return (false);
-	if (!put_imgs_to_win(mlx, p->left.imgs, p->render_pos))
+	if (!put_imgs_to_win(mlx, p->left.imgs, p->render_pos, num_sprites))
 		return (false);
-	if (!put_imgs_to_win(mlx, p->right.imgs, p->render_pos))
+	if (!put_imgs_to_win(mlx, p->right.imgs, p->render_pos, num_sprites))
 		return (false);
 	return (true);
 }
@@ -51,7 +51,7 @@ bool	init_player(t_solong *so, t_character *p)
 	p->num_characters = 0;
 	if (!init_player_anims(so))
 		return (false);
-	if (!put_first_sprites_to_win(p, so->mlx))
+	if (!put_first_sprites_to_win(p, so->mlx, NUM_PLAYER_SPRITES))
 		return (false);
 	p->curr_imgs = p->down.imgs;
 	p->curr_num_frames = p->down.num_frames;

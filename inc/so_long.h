@@ -6,7 +6,7 @@
 /*   By: rstancu <rstancu@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 13:24:24 by rstancu           #+#    #+#             */
-/*   Updated: 2026/01/16 15:33:13 by rstancu          ###   ########.fr       */
+/*   Updated: 2026/01/16 16:07:45 by rstancu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void	unable_sprites(mlx_image_t **sprites, int num);
 
 void	print_map(t_map *map, t_solong *so);
 
-bool	init_emenies(t_solong *so);
+bool	init_enemies(t_solong *so);
 bool	init_player_anims(t_solong *so);
 ///////////////////// Animations initialization
 bool	init_enemy_down(t_character *e, mlx_t *mlx, char *one, char *two);
